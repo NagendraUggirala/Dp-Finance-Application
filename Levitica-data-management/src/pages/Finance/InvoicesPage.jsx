@@ -1,0 +1,409 @@
+import React, { useState } from "react";
+import { Bell, FileText, Plus, Download, Pencil, X, Save } from "lucide-react";
+
+const inputClass = "w-full px-3 py-2.5 rounded-xl bg-brand-soft border border-gray-200 text-body placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent text-sm";
+const labelClass = "block text-xs font-medium text-body uppercase tracking-wider mb-1.5";
+
+const formatINR = (n) => (n == null || isNaN(n) ? "0" : "₹" + Number(n).toLocaleString("en-IN"));
+
+function NewInvoiceModal({ open, onClose, onSave }) {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, "0");
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const yyyy = today.getFullYear();
+  const todayStr = `${dd}-${mm}-${yyyy}`;
+
+  const [form, setForm] = useState({
+    invoiceNumber: "INV-" + Math.floor(100000 + Math.random() * 900000),
+    client: "",
+    type: "Company",
+    category: "Revenue",
+    baseAmount: "",
+    status: "Pending",
+    paymentMethod: "",
+    invoiceDate: todayStr,
+    dueDate: "",
+    paidDate: "",
+    description: "",
+  });
+
+  const baseNum = parseFloat(String(form.baseAmount).replace(/,/g, "")) || 0;
+  const gstNum = Math.round(baseNum * 0.18);
+  const totalNum = baseNum + gstNum;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!form.client?.trim()) return;
+    const base = baseNum;
+    const gst = gstNum;
+    const total = totalNum;
+    const newInvoice = {
+      id: Date.now(),
+      invoiceNo: form.invoiceNumber,
+      client: form.client.trim(),
+      type: form.type,
+      baseAmount: formatINR(base),
+      gst: formatINR(gst),
+      total: formatINR(total),
+      status: form.status,
+      method: form.paymentMethod || "-",
+      invoiceDate: form.invoiceDate || "-",
+      dueDate: form.dueDate || "-",
+      paidDate: form.paidDate || "-",
+      description: form.description?.trim() || "-",
+    };
+    onSave(newInvoice);
+    setForm({
+      invoiceNumber: "INV-" + Math.floor(100000 + Math.random() * 900000),
+      client: "",
+      type: "Company",
+      category: "Revenue",
+      baseAmount: "",
+      status: "Pending",
+      paymentMethod: "",
+      invoiceDate: `${String(today.getDate()).padStart(2, "0")}-${String(today.getMonth() + 1).padStart(2, "0")}-${today.getFullYear()}`,
+      dueDate: "",
+      paidDate: "",
+      description: "",
+    });
+    onClose();
+  };
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} aria-hidden />
+      <div className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-xl border border-gray-100">
+        <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between shrink-0">
+          <h2 className="text-lg font-bold text-brand-dark">New Invoice</h2>
+          <button type="button" onClick={onClose} className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 hover:bg-gray-100 transition" aria-label="Close">
+            <X className="w-5 h-5" strokeWidth={2} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          <div>
+            <h3 className="text-sm font-semibold text-brand mb-4">Invoice Details</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className={labelClass}>Invoice Number</label>
+                <input type="text" name="invoiceNumber" value={form.invoiceNumber} onChange={handleChange} className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>Client / Party *</label>
+                <input type="text" name="client" value={form.client} onChange={handleChange} placeholder="Client or candidate name" className={inputClass} required />
+              </div>
+              <div>
+                <label className={labelClass}>Type</label>
+                <select name="type" value={form.type} onChange={handleChange} className={inputClass}>
+                  <option>Company</option>
+                  <option>Training</option>
+                </select>
+              </div>
+              <div>
+                <label className={labelClass}>Category</label>
+                <select name="category" value={form.category} onChange={handleChange} className={inputClass}>
+                  <option>Revenue</option>
+                  <option>Expense</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold text-brand mb-4">Amounts</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div>
+                <label className={labelClass}>Base Amount (₹) *</label>
+                <input type="number" name="baseAmount" value={form.baseAmount} onChange={handleChange} placeholder="0" min="0" step="1" className={inputClass} required />
+              </div>
+              <div>
+                <label className={labelClass}>GST (18%) - AUTO</label>
+                <input type="text" readOnly value={formatINR(gstNum)} className={inputClass + " bg-gray-50"} />
+              </div>
+              <div>
+                <label className={labelClass}>Total (Incl. GST)</label>
+                <input type="text" readOnly value={formatINR(totalNum)} className={inputClass + " bg-gray-50"} />
+              </div>
+              <div>
+                <label className={labelClass}>Status</label>
+                <select name="status" value={form.status} onChange={handleChange} className={inputClass}>
+                  <option>Pending</option>
+                  <option>Paid</option>
+                  <option>Overdue</option>
+                  <option>Partial</option>
+                </select>
+              </div>
+              <div>
+                <label className={labelClass}>Payment Method</label>
+                <select name="paymentMethod" value={form.paymentMethod} onChange={handleChange} className={inputClass}>
+                  <option value="">Select</option>
+                  <option>Bank Transfer</option>
+                  <option>UPI</option>
+                  <option>Credit Card</option>
+                  <option>Cash</option>
+                </select>
+              </div>
+              <div>
+                <label className={labelClass}>Invoice Date</label>
+                <input type="text" name="invoiceDate" value={form.invoiceDate} onChange={handleChange} placeholder="dd-mm-yyyy" className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>Due Date</label>
+                <input type="text" name="dueDate" value={form.dueDate} onChange={handleChange} placeholder="dd-mm-yyyy" className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>Paid Date</label>
+                <input type="text" name="paidDate" value={form.paidDate} onChange={handleChange} placeholder="dd-mm-yyyy" className={inputClass} />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label className={labelClass}>Description</label>
+            <textarea name="description" value={form.description} onChange={handleChange} rows={3} placeholder="Additional notes" className={inputClass} />
+          </div>
+
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+            <button type="button" onClick={onClose} className="px-4 py-2.5 rounded-xl border border-gray-200 text-body hover:bg-gray-50 font-medium text-sm transition">
+              Cancel
+            </button>
+            <button type="submit" className="btn-primary flex items-center gap-2 px-4 py-2.5 rounded-xl text-white font-medium text-sm shadow-sm hover:opacity-95 transition">
+              <Save className="w-4 h-4" strokeWidth={2} />
+              Save Invoice
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+const STATUS_STYLES = {
+  Paid: "bg-success/15 text-success",
+  Pending: "bg-warning/15 text-warning",
+  Overdue: "bg-danger/15 text-danger",
+  Partial: "bg-amber-100 text-amber-700",
+};
+
+const TYPE_STYLES = {
+  Company: "bg-teal-100 text-teal-700",
+  Training: "bg-brand-soft text-brand",
+};
+
+const INITIAL_INVOICES = [
+  { id: 1, invoiceNo: "IV-2025-001", client: "MediCore India", type: "Company", baseAmount: "₹6,50,000", gst: "₹1,53,600", total: "₹10,03,000", status: "Paid", method: "Bank Transfer", invoiceDate: "2025-01-28", dueDate: "2025-01-31", paidDate: "2025-01-23", description: "Consulting services Q1" },
+  { id: 2, invoiceNo: "IV-2025-002", client: "Dev Mahajan & Co", type: "Training", baseAmount: "₹2,50,000", gst: "₹45,000", total: "₹2,95,000", status: "Paid", method: "UPI", invoiceDate: "2025-01-15", dueDate: "2025-01-25", paidDate: "2025-01-20", description: "Training batch Jan 2025" },
+  { id: 3, invoiceNo: "IV-2025-003", client: "Ratul MaxGroup", type: "Company", baseAmount: "₹1,80,000", gst: "₹32,400", total: "₹2,12,400", status: "Pending", method: "-", invoiceDate: "2025-02-01", dueDate: "2025-02-15", paidDate: "-", description: "Annual retainer" },
+  { id: 4, invoiceNo: "IV-2025-004", client: "Lata Krishnan", type: "Training", baseAmount: "₹1,20,000", gst: "₹21,600", total: "₹1,41,600", status: "Overdue", method: "-", invoiceDate: "2025-01-20", dueDate: "2025-02-05", paidDate: "-", description: "Certification program" },
+  { id: 5, invoiceNo: "IV-2025-005", client: "TechNova Solutions", type: "Company", baseAmount: "₹4,00,000", gst: "₹72,000", total: "₹4,72,000", status: "Partial", method: "Credit Card", invoiceDate: "2025-02-10", dueDate: "2025-02-28", paidDate: "2025-02-12", description: "Implementation Phase 1" },
+  { id: 6, invoiceNo: "IV-2025-006", client: "EduLearn Pvt Ltd", type: "Training", baseAmount: "₹3,00,000", gst: "₹54,000", total: "₹3,54,000", status: "Paid", method: "Bank Transfer", invoiceDate: "2025-02-05", dueDate: "2025-02-20", paidDate: "2025-02-18", description: "Corporate training" },
+];
+
+export default function InvoicesPage() {
+  const [invoices, setInvoices] = useState(INITIAL_INVOICES);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All Status");
+  const [typeFilter, setTypeFilter] = useState("All Types");
+  const [showNewInvoiceModal, setShowNewInvoiceModal] = useState(false);
+
+  const filtered = invoices.filter((row) => {
+    const matchSearch =
+      !search ||
+      row.client.toLowerCase().includes(search.toLowerCase()) ||
+      row.invoiceNo.toLowerCase().includes(search.toLowerCase());
+    const matchStatus = statusFilter === "All Status" || row.status === statusFilter;
+    const matchType = typeFilter === "All Types" || row.type === typeFilter;
+    return matchSearch && matchStatus && matchType;
+  });
+
+  return (
+    <>
+      <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between gap-4 shadow-sm shrink-0">
+        <div>
+          <h1 className="text-lg font-semibold text-brand-dark">Invoices</h1>
+          <p className="text-sm text-body">/ Billing &amp; Collections</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <input
+            type="search"
+            placeholder="Search anything..."
+            className="w-64 px-4 py-2 rounded-xl bg-brand-soft border border-gray-200 text-body placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent text-sm"
+          />
+          <button
+            type="button"
+            className="w-10 h-10 rounded-xl bg-brand-soft border border-gray-200 flex items-center justify-center text-body hover:bg-brand-light transition"
+            aria-label="Notifications"
+          >
+            <Bell className="w-5 h-5" strokeWidth={2} />
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowNewInvoiceModal(true)}
+            className="btn-primary flex items-center gap-2 px-4 py-2.5 rounded-xl text-white font-medium text-sm shadow-sm hover:opacity-95 transition"
+          >
+            <Plus className="w-4 h-4" strokeWidth={2} />
+            New Invoice
+          </button>
+        </div>
+      </header>
+
+      <NewInvoiceModal
+        open={showNewInvoiceModal}
+        onClose={() => setShowNewInvoiceModal(false)}
+        onSave={(inv) => setInvoices((prev) => [inv, ...prev])}
+      />
+
+      <div className="flex-1 min-h-0 p-6 overflow-auto">
+        {/* Six metric cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-4">
+          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm">
+            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Collected</p>
+            <p className="text-lg font-bold text-success">₹22,24,300</p>
+          </div>
+          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm">
+            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Pending</p>
+            <p className="text-lg font-bold text-warning">₹3,06,800</p>
+          </div>
+          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm">
+            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Overdue</p>
+            <p className="text-lg font-bold text-danger">₹4,72,000</p>
+          </div>
+          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm">
+            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Invoiced</p>
+            <p className="text-lg font-bold text-brand">₹30,03,100</p>
+          </div>
+          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm">
+            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Company Invoices</p>
+            <p className="text-lg font-bold text-teal-600">5</p>
+          </div>
+          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm">
+            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Training Fees</p>
+            <p className="text-lg font-bold text-brand">5</p>
+          </div>
+        </div>
+
+        {/* Collection rate */}
+        <div className="mb-6 flex items-center gap-3">
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Collection Rate</span>
+          <span className="text-2xl font-bold text-success">74%</span>
+        </div>
+
+        {/* Invoice Ledger */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+          <div className="px-5 py-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-base font-semibold text-brand-dark flex items-center gap-2">
+              <FileText className="w-5 h-5 text-brand" strokeWidth={2} />
+              Invoice Ledger
+            </h2>
+            <div className="flex flex-wrap items-center gap-2">
+              <input
+                type="search"
+                placeholder="Search client, invoice #"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="px-3 py-2 rounded-xl bg-brand-soft border border-gray-200 text-sm text-body placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand w-48"
+              />
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="px-3 py-2 rounded-xl bg-brand-soft border border-gray-200 text-sm text-body focus:outline-none focus:ring-2 focus:ring-brand appearance-none cursor-pointer pr-8"
+              >
+                <option>All Status</option>
+                <option>Paid</option>
+                <option>Pending</option>
+                <option>Overdue</option>
+                <option>Partial</option>
+              </select>
+              <select
+                value={typeFilter}
+                onChange={(e) => setTypeFilter(e.target.value)}
+                className="px-3 py-2 rounded-xl bg-brand-soft border border-gray-200 text-sm text-body focus:outline-none focus:ring-2 focus:ring-brand appearance-none cursor-pointer pr-8"
+              >
+                <option>All Types</option>
+                <option>Company</option>
+                <option>Training</option>
+              </select>
+              <button
+                type="button"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-brand-soft border border-gray-200 text-body hover:bg-brand-light text-sm font-medium transition"
+              >
+                <Download className="w-4 h-4" strokeWidth={2} />
+                Export
+              </button>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[1000px] text-sm">
+              <thead>
+                <tr className="bg-gray-50 border-b border-gray-100">
+                  <th className="text-left py-3 px-4 font-semibold text-gray-600">S.no</th>
+                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Invoice #</th>
+                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Client</th>
+                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Type</th>
+                  <th className="text-right py-3 px-4 font-semibold text-gray-600">Base Amount</th>
+                  <th className="text-right py-3 px-4 font-semibold text-gray-600">GST (18%)</th>
+                  <th className="text-right py-3 px-4 font-semibold text-gray-600">Total</th>
+                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Status</th>
+                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Method</th>
+                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Invoice Date</th>
+                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Due Date</th>
+                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Paid Date</th>
+                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Description</th>
+                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((row, idx) => (
+                  <tr key={row.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition py-4">
+                    <td className="py-4 px-4 text-body">{idx + 1}</td>
+                    <td className="py-4 px-4 font-medium text-brand-dark">{row.invoiceNo}</td>
+                    <td className="py-4 px-4 text-body">{row.client}</td>
+                    <td className="py-4 px-4">
+                      <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${TYPE_STYLES[row.type] || "bg-gray-100 text-gray-700"}`}>
+                        {row.type}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 text-right text-body">{row.baseAmount}</td>
+                    <td className="py-4 px-4 text-right text-body">{row.gst}</td>
+                    <td className="py-4 px-4 text-right font-medium text-brand-dark">{row.total}</td>
+                    <td className="py-4 px-4">
+                      <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_STYLES[row.status] || "bg-gray-100 text-gray-700"}`}>
+                        {row.status}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 text-body">{row.method}</td>
+                    <td className="py-4 px-4 text-body">{row.invoiceDate}</td>
+                    <td className="py-4 px-4 text-body">{row.dueDate}</td>
+                    <td className="py-4 px-4 text-body">{row.paidDate}</td>
+                    <td className="py-4 px-4 text-body max-w-[180px] truncate" title={row.description}>{row.description}</td>
+                    <td className="py-4 px-4">
+                      <button
+                        type="button"
+                        onClick={() => {}}
+                        className="p-2 rounded-lg text-body hover:bg-brand-soft hover:text-brand transition"
+                        aria-label="Edit invoice"
+                      >
+                        <Pencil className="w-4 h-4" strokeWidth={2} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {filtered.length === 0 && (
+            <div className="py-12 text-center text-body text-sm">No invoices match your filters.</div>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
