@@ -182,42 +182,54 @@ export default function AdminUsersRolesPage() {
       </header>
 
       <div className="flex-1 min-h-0 p-6 overflow-auto">
-        {/* KPI cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-soft flex items-center justify-center text-brand">
-              <Users className="w-5 h-5" strokeWidth={2} />
-            </div>
-            <div>
-              <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Total Users</p>
-              <p className="text-xl font-bold text-brand-dark">{users.length}</p>
-            </div>
-          </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600">
-              <User className="w-5 h-5" strokeWidth={2} />
-            </div>
-            <div>
-              <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Sales Reps</p>
-              <p className="text-xl font-bold text-brand-dark">{users.filter((u) => u.role === "Sales Rep").length}</p>
+        {/* KPI cards - same style as Finance */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div className="group rounded-2xl bg-gradient-to-br from-brand-soft to-white border border-brand-light/80 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-brand-dark/80 uppercase tracking-wider mb-1.5">Total Users</p>
+                <p className="text-2xl font-bold text-brand-dark tabular-nums tracking-tight">{users.length}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Users className="w-5 h-5 text-brand" strokeWidth={2} />
+              </span>
             </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
-              <User className="w-5 h-5" strokeWidth={2} />
-            </div>
-            <div>
-              <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Managers</p>
-              <p className="text-xl font-bold text-brand-dark">{users.filter((u) => u.role === "Sales Manager").length}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-amber-50 to-white border border-amber-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-amber-600/90 uppercase tracking-wider mb-1.5">Sales Reps</p>
+                <p className="text-2xl font-bold text-amber-700 tabular-nums tracking-tight">{users.filter((u) => u.role === "Sales Rep").length}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-amber-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <User className="w-5 h-5 text-amber-600" strokeWidth={2} />
+              </span>
             </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
-              <User className="w-5 h-5" strokeWidth={2} />
+          <div className="group rounded-2xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-emerald-600/90 uppercase tracking-wider mb-1.5">Managers</p>
+                <p className="text-2xl font-bold text-emerald-700 tabular-nums tracking-tight">{users.filter((u) => u.role === "Sales Manager").length}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-emerald-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <User className="w-5 h-5 text-emerald-600" strokeWidth={2} />
+              </span>
             </div>
-            <div>
-              <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Admins</p>
-              <p className="text-xl font-bold text-brand-dark">{users.filter((u) => u.role === "Admin").length}</p>
+          </div>
+          <div className="group rounded-2xl bg-gradient-to-br from-blue-50 to-white border border-blue-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-blue-600/90 uppercase tracking-wider mb-1.5">Admins</p>
+                <p className="text-2xl font-bold text-blue-700 tabular-nums tracking-tight">{users.filter((u) => u.role === "Admin").length}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-blue-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <User className="w-5 h-5 text-blue-600" strokeWidth={2} />
+              </span>
             </div>
           </div>
         </div>

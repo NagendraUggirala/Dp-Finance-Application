@@ -9,6 +9,12 @@ import {
   Download,
   X,
   Save,
+  Users,
+  UserPlus,
+  Phone,
+  CheckCircle,
+  Trophy,
+  UserX,
 } from "lucide-react";
 
 const INDUSTRIES = ["Technology", "Consulting", "Retail", "Healthcare", "Education", "Finance", "Manufacturing", "Other"];
@@ -165,31 +171,79 @@ export default function AdminLeadsPage() {
       </header>
 
       <div className="flex-1 min-h-0 p-6 overflow-auto">
-        {/* Six summary cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Total</p>
-            <p className="text-2xl font-bold text-brand-dark">{stats.total}</p>
+        {/* Six summary cards - same style as Finance */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <div className="group rounded-2xl bg-gradient-to-br from-brand-soft to-white border border-brand-light/80 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-brand-dark/80 uppercase tracking-wider mb-1.5">Total</p>
+                <p className="text-2xl font-bold text-brand-dark tabular-nums tracking-tight">{stats.total}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Leads</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Users className="w-5 h-5 text-brand" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">New</p>
-            <p className="text-2xl font-bold text-blue-600">{stats.new}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-blue-50 to-white border border-blue-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-blue-600/90 uppercase tracking-wider mb-1.5">New</p>
+                <p className="text-2xl font-bold text-blue-700 tabular-nums tracking-tight">{stats.new}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-blue-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <UserPlus className="w-5 h-5 text-blue-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Contacted</p>
-            <p className="text-2xl font-bold text-amber-600">{stats.contacted}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-amber-50 to-white border border-amber-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-amber-600/90 uppercase tracking-wider mb-1.5">Contacted</p>
+                <p className="text-2xl font-bold text-amber-700 tabular-nums tracking-tight">{stats.contacted}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-amber-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Phone className="w-5 h-5 text-amber-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Qualified</p>
-            <p className="text-2xl font-bold text-emerald-600">{stats.qualified}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-emerald-600/90 uppercase tracking-wider mb-1.5">Qualified</p>
+                <p className="text-2xl font-bold text-emerald-700 tabular-nums tracking-tight">{stats.qualified}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-emerald-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <CheckCircle className="w-5 h-5 text-emerald-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Converted</p>
-            <p className="text-2xl font-bold text-success">{stats.converted}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-teal-50 to-white border border-teal-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-teal-600/90 uppercase tracking-wider mb-1.5">Converted</p>
+                <p className="text-2xl font-bold text-teal-700 tabular-nums tracking-tight">{stats.converted}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-teal-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Trophy className="w-5 h-5 text-teal-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Disqualified</p>
-            <p className="text-2xl font-bold text-danger">{stats.disqualified}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-red-50 to-white border border-red-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-red-600/90 uppercase tracking-wider mb-1.5">Disqualified</p>
+                <p className="text-2xl font-bold text-red-700 tabular-nums tracking-tight">{stats.disqualified}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-red-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <UserX className="w-5 h-5 text-red-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
         </div>
 

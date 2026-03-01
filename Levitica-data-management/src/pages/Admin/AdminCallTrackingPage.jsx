@@ -7,6 +7,12 @@ import {
   X,
   Save,
   Calendar,
+  Phone,
+  CheckCircle,
+  Voicemail,
+  PhoneOff,
+  Mic,
+  Percent,
 } from "lucide-react";
 
 const ACTIVITY_TYPES = ["Call", "Email", "Meeting"];
@@ -151,31 +157,79 @@ export default function AdminCallTrackingPage() {
       </header>
 
       <div className="flex-1 min-h-0 p-6 overflow-auto">
-        {/* Six summary cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Total Calls</p>
-            <p className="text-2xl font-bold text-teal-600">{calls.length}</p>
+        {/* Six summary cards - same style as Finance */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <div className="group rounded-2xl bg-gradient-to-br from-teal-50 to-white border border-teal-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-teal-600/90 uppercase tracking-wider mb-1.5">Total Calls</p>
+                <p className="text-2xl font-bold text-teal-700 tabular-nums tracking-tight">{calls.length}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-teal-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Phone className="w-5 h-5 text-teal-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Connected</p>
-            <p className="text-2xl font-bold text-success">{connectedCount}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-emerald-600/90 uppercase tracking-wider mb-1.5">Connected</p>
+                <p className="text-2xl font-bold text-emerald-700 tabular-nums tracking-tight">{connectedCount}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-emerald-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <CheckCircle className="w-5 h-5 text-emerald-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Voicemail</p>
-            <p className="text-2xl font-bold text-amber-600">{voicemailCount}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-amber-50 to-white border border-amber-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-amber-600/90 uppercase tracking-wider mb-1.5">Voicemail</p>
+                <p className="text-2xl font-bold text-amber-700 tabular-nums tracking-tight">{voicemailCount}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-amber-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Voicemail className="w-5 h-5 text-amber-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">No Answer</p>
-            <p className="text-2xl font-bold text-danger">{noAnswerCount}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-red-50 to-white border border-red-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-red-600/90 uppercase tracking-wider mb-1.5">No Answer</p>
+                <p className="text-2xl font-bold text-red-700 tabular-nums tracking-tight">{noAnswerCount}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-red-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <PhoneOff className="w-5 h-5 text-red-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Recordings</p>
-            <p className="text-2xl font-bold text-violet-600">{withRecording}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-violet-50 to-white border border-violet-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-violet-600/90 uppercase tracking-wider mb-1.5">Recordings</p>
+                <p className="text-2xl font-bold text-violet-700 tabular-nums tracking-tight">{withRecording}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-violet-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Mic className="w-5 h-5 text-violet-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Connect Rate</p>
-            <p className="text-2xl font-bold text-brand">{connectRate}%</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-brand-soft to-white border border-brand-light/80 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-brand-dark/80 uppercase tracking-wider mb-1.5">Connect Rate</p>
+                <p className="text-2xl font-bold text-brand-dark tabular-nums tracking-tight">{connectRate}%</p>
+                <p className="text-xs text-gray-500 mt-1.5">Rate</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Percent className="w-5 h-5 text-brand" strokeWidth={2} />
+              </span>
+            </div>
           </div>
         </div>
 

@@ -174,42 +174,54 @@ export default function AdminDocumentsPage() {
       </header>
 
       <div className="flex-1 min-h-0 p-6 overflow-auto">
-        {/* Four summary cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex items-center gap-3">
-            <span className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center shrink-0">
-              <FileStack className="w-5 h-5 text-violet-600" strokeWidth={2} />
-            </span>
-            <div>
-              <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Total Files</p>
-              <p className="text-xl font-bold text-brand-dark">{totalFiles}</p>
+        {/* Four summary cards - same style as Finance */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div className="group rounded-2xl bg-gradient-to-br from-brand-soft to-white border border-brand-light/80 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-brand-dark/80 uppercase tracking-wider mb-1.5">Total Files</p>
+                <p className="text-2xl font-bold text-brand-dark tabular-nums tracking-tight">{totalFiles}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Files</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center group-hover:scale-105 transition-transform">
+                <FileStack className="w-5 h-5 text-brand" strokeWidth={2} />
+              </span>
             </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex items-center gap-3">
-            <span className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center shrink-0">
-              <Mic className="w-5 h-5 text-violet-600" strokeWidth={2} />
-            </span>
-            <div>
-              <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Call Recordings</p>
-              <p className="text-xl font-bold text-violet-600">{callRecordings}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-violet-50 to-white border border-violet-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-violet-600/90 uppercase tracking-wider mb-1.5">Call Recordings</p>
+                <p className="text-2xl font-bold text-violet-700 tabular-nums tracking-tight">{callRecordings}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-violet-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Mic className="w-5 h-5 text-violet-600" strokeWidth={2} />
+              </span>
             </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex items-center gap-3">
-            <span className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center shrink-0">
-              <FileText className="w-5 h-5 text-violet-600" strokeWidth={2} />
-            </span>
-            <div>
-              <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Proposals</p>
-              <p className="text-xl font-bold text-violet-600">{proposals}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-blue-50 to-white border border-blue-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-blue-600/90 uppercase tracking-wider mb-1.5">Proposals</p>
+                <p className="text-2xl font-bold text-blue-700 tabular-nums tracking-tight">{proposals}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-blue-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <FileText className="w-5 h-5 text-blue-600" strokeWidth={2} />
+              </span>
             </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex items-center gap-3">
-            <span className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0">
-              <FileCheck className="w-5 h-5 text-emerald-600" strokeWidth={2} />
-            </span>
-            <div>
-              <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Contracts</p>
-              <p className="text-xl font-bold text-emerald-600">{contracts}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-emerald-600/90 uppercase tracking-wider mb-1.5">Contracts</p>
+                <p className="text-2xl font-bold text-emerald-700 tabular-nums tracking-tight">{contracts}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-emerald-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <FileCheck className="w-5 h-5 text-emerald-600" strokeWidth={2} />
+              </span>
             </div>
           </div>
         </div>

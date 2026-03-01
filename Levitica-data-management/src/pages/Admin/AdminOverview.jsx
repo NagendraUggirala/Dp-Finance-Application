@@ -8,6 +8,11 @@ import {
   Target,
   Activity,
   Trophy,
+  Wallet,
+  TrendingUp,
+  Briefcase,
+  Percent,
+  AlertCircle,
 } from "lucide-react";
 
 const RECENT_ACTIVITY = [
@@ -80,34 +85,79 @@ export default function AdminOverview() {
       </header>
 
       <div className="flex-1 min-h-0 p-6 overflow-auto">
-        {/* Six KPI cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
-          <div className="rounded-2xl bg-white border border-gray-100 p-5 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Total Leads</p>
-            <p className="text-2xl font-bold text-blue-600">8</p>
-            <p className="text-xs text-blue-600">3 new</p>
+        {/* Six KPI cards - same style as Finance */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <div className="group rounded-2xl bg-gradient-to-br from-blue-50 to-white border border-blue-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-blue-600/90 uppercase tracking-wider mb-1.5">Total Leads</p>
+                <p className="text-2xl font-bold text-blue-700 tabular-nums tracking-tight">8</p>
+                <p className="text-xs text-gray-500 mt-1.5">3 new</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-blue-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Target className="w-5 h-5 text-blue-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-5 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Revenue Won</p>
-            <p className="text-2xl font-bold text-success">₹17,70,000</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-teal-50 to-white border border-teal-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-teal-600/90 uppercase tracking-wider mb-1.5">Revenue Won</p>
+                <p className="text-2xl font-bold text-teal-700 tabular-nums tracking-tight">₹17,70,000</p>
+                <p className="text-xs text-gray-500 mt-1.5">Won</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-teal-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Wallet className="w-5 h-5 text-teal-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-5 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Active Pipeline</p>
-            <p className="text-2xl font-bold text-brand">₹32,25,000</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-brand-soft to-white border border-brand-light/80 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-brand-dark/80 uppercase tracking-wider mb-1.5">Active Pipeline</p>
+                <p className="text-2xl font-bold text-brand-dark tabular-nums tracking-tight">₹32,25,000</p>
+                <p className="text-xs text-gray-500 mt-1.5">Value</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Briefcase className="w-5 h-5 text-brand" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-5 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Win Rate</p>
-            <p className="text-2xl font-bold text-amber-600">25%</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-amber-50 to-white border border-amber-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-amber-600/90 uppercase tracking-wider mb-1.5">Win Rate</p>
+                <p className="text-2xl font-bold text-amber-700 tabular-nums tracking-tight">25%</p>
+                <p className="text-xs text-gray-500 mt-1.5">Rate</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-amber-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Percent className="w-5 h-5 text-amber-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-5 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Total Activities</p>
-            <p className="text-2xl font-bold text-purple-600">6</p>
-            <p className="text-xs text-purple-600">6 calls</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-violet-50 to-white border border-violet-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-violet-600/90 uppercase tracking-wider mb-1.5">Total Activities</p>
+                <p className="text-2xl font-bold text-violet-700 tabular-nums tracking-tight">6</p>
+                <p className="text-xs text-gray-500 mt-1.5">6 calls</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-violet-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Activity className="w-5 h-5 text-violet-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-5 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Overdue Tasks</p>
-            <p className="text-2xl font-bold text-danger">5</p>
-            <p className="text-xs text-danger">5 pending total</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-red-50 to-white border border-red-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-red-600/90 uppercase tracking-wider mb-1.5">Overdue Tasks</p>
+                <p className="text-2xl font-bold text-red-700 tabular-nums tracking-tight">5</p>
+                <p className="text-xs text-gray-500 mt-1.5">5 pending total</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-red-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <AlertCircle className="w-5 h-5 text-red-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
         </div>
 

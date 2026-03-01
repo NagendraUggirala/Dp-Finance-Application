@@ -8,6 +8,8 @@ import {
   X,
   Save,
   Calendar,
+  Mail,
+  Link2,
 } from "lucide-react";
 
 const REPS = [
@@ -127,19 +129,43 @@ export default function AdminEmailLogPage() {
       </header>
 
       <div className="flex-1 min-h-0 p-6 overflow-auto">
-        {/* Three summary cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Total Emails</p>
-            <p className="text-2xl font-bold text-violet-600">{emails.length}</p>
+        {/* Three summary cards - same style as Finance */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <div className="group rounded-2xl bg-gradient-to-br from-violet-50 to-white border border-violet-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-violet-600/90 uppercase tracking-wider mb-1.5">Total Emails</p>
+                <p className="text-2xl font-bold text-violet-700 tabular-nums tracking-tight">{emails.length}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-violet-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Mail className="w-5 h-5 text-violet-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">This Month</p>
-            <p className="text-2xl font-bold text-blue-600">{thisMonth}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-blue-50 to-white border border-blue-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-blue-600/90 uppercase tracking-wider mb-1.5">This Month</p>
+                <p className="text-2xl font-bold text-blue-700 tabular-nums tracking-tight">{thisMonth}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-blue-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Calendar className="w-5 h-5 text-blue-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm flex flex-col gap-1">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Linked to Deals</p>
-            <p className="text-2xl font-bold text-brand">{linkedToDeals}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-brand-soft to-white border border-brand-light/80 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-brand-dark/80 uppercase tracking-wider mb-1.5">Linked to Deals</p>
+                <p className="text-2xl font-bold text-brand-dark tabular-nums tracking-tight">{linkedToDeals}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Link2 className="w-5 h-5 text-brand" strokeWidth={2} />
+              </span>
+            </div>
           </div>
         </div>
 
