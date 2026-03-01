@@ -356,31 +356,79 @@ export default function LogCallPage() {
       />
 
       <div className="flex-1 min-h-0 p-6 overflow-auto">
-        {/* Call statistics */}
-        <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-brand">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Calls</p>
-            <p className="text-lg font-bold text-brand-dark">{totalCalls}</p>
+        {/* Call statistics - same style as Finance */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <div className="group rounded-2xl bg-gradient-to-br from-brand-soft to-white border border-brand-light/80 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-brand-dark/80 uppercase tracking-wider mb-1.5">Total Calls</p>
+                <p className="text-2xl font-bold text-brand-dark tabular-nums tracking-tight">{totalCalls}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Phone className="w-5 h-5 text-brand" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-success">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Connected</p>
-            <p className="text-lg font-bold text-success">{connected}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-teal-50 to-white border border-teal-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-teal-600/90 uppercase tracking-wider mb-1.5">Connected</p>
+                <p className="text-2xl font-bold text-teal-700 tabular-nums tracking-tight">{connected}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-teal-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Phone className="w-5 h-5 text-teal-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-amber-500">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Voicemail</p>
-            <p className="text-lg font-bold text-amber-600">{voicemail}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-amber-50 to-white border border-amber-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-amber-600/90 uppercase tracking-wider mb-1.5">Voicemail</p>
+                <p className="text-2xl font-bold text-amber-700 tabular-nums tracking-tight">{voicemail}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-amber-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Phone className="w-5 h-5 text-amber-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-danger">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">No Answer</p>
-            <p className="text-lg font-bold text-danger">{noAnswer}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-red-50 to-white border border-red-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-red-600/90 uppercase tracking-wider mb-1.5">No Answer</p>
+                <p className="text-2xl font-bold text-red-700 tabular-nums tracking-tight">{noAnswer}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-red-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Phone className="w-5 h-5 text-red-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-brand">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Recordings</p>
-            <p className="text-lg font-bold text-brand">{recordings}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-violet-50 to-white border border-violet-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-violet-600/90 uppercase tracking-wider mb-1.5">Recordings</p>
+                <p className="text-2xl font-bold text-violet-700 tabular-nums tracking-tight">{recordings}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-violet-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Phone className="w-5 h-5 text-violet-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-brand">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Connect Rate</p>
-            <p className="text-lg font-bold text-brand">{connectRate}%</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-brand-soft to-white border border-brand-light/80 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-brand-dark/80 uppercase tracking-wider mb-1.5">Connect Rate</p>
+                <p className="text-2xl font-bold text-brand-dark tabular-nums tracking-tight">{connectRate}%</p>
+                <p className="text-xs text-gray-500 mt-1.5">Rate</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Calendar className="w-5 h-5 text-brand" strokeWidth={2} />
+              </span>
+            </div>
           </div>
         </div>
 
@@ -415,53 +463,51 @@ export default function LogCallPage() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1000px] text-sm">
+            <table className="w-max min-w-[1000px] text-sm table-fixed">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-100">
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">#</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Date</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Subject</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Company</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Outcome</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Duration</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Rep</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Deal</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Notes</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Recording</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Actions</th>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="text-right py-3 px-3 font-semibold text-gray-600">#</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Date</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Subject</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Company</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Outcome</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Duration</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Rep</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Deal</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Notes</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Recording</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((row, idx) => (
-                  <tr key={row.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition">
-                    <td className="py-4 px-4 text-body">{idx + 1}</td>
-                    <td className="py-4 px-4 text-body">{row.date}</td>
-                    <td className="py-4 px-4 font-medium text-brand-dark">{row.subject}</td>
-                    <td className="py-4 px-4 text-body">{row.company}</td>
-                    <td className="py-4 px-4">
+                  <tr key={row.id} className="border-b border-gray-100 hover:bg-gray-50/50 transition">
+                    <td className="py-3 px-3 text-right text-body tabular-nums">{idx + 1}</td>
+                    <td className="py-3 px-3 text-center text-body tabular-nums whitespace-nowrap">{row.date}</td>
+                    <td className="py-3 px-3 font-medium text-brand-dark truncate" title={row.subject}>{row.subject}</td>
+                    <td className="py-3 px-3 text-body truncate" title={row.company}>{row.company}</td>
+                    <td className="py-3 px-3">
                       <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
                         {row.outcome}
                       </span>
                     </td>
-                    <td className="py-4 px-4 text-body">{row.duration}</td>
-                    <td className="py-4 px-4">
+                    <td className="py-3 px-3 text-center text-body tabular-nums">{row.duration}</td>
+                    <td className="py-3 px-3">
                       <div className="flex items-center gap-2">
-                        <span className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-semibold text-xs">
+                        <span className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-semibold text-xs shrink-0">
                           {row.repInitials}
                         </span>
-                        <span className="text-body">{row.rep}</span>
+                        <span className="text-body truncate" title={row.rep}>{row.rep}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-body">{row.deal}</td>
-                    <td className="py-4 px-4 text-body max-w-[180px] truncate" title={row.notes}>
-                      {row.notes}
-                    </td>
-                    <td className="py-4 px-4 text-body">{row.recording}</td>
-                    <td className="py-4 px-4">
+                    <td className="py-3 px-3 text-body truncate" title={row.deal}>{row.deal}</td>
+                    <td className="py-3 px-3 text-body truncate max-w-0" title={row.notes}>{row.notes}</td>
+                    <td className="py-3 px-3 text-body truncate" title={row.recording}>{row.recording}</td>
+                    <td className="py-3 px-3 text-center">
                       <button
                         type="button"
                         onClick={() => {}}
-                        className="p-2 rounded-lg text-body hover:bg-brand-soft hover:text-brand transition"
+                        className="inline-flex p-2 rounded-lg text-body hover:bg-brand-soft hover:text-brand transition"
                         aria-label="Edit call"
                       >
                         <Pencil className="w-4 h-4" strokeWidth={2} />

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Bell, Users, Plus, Pencil, X, Save, Calendar } from "lucide-react";
+import { Bell, Users, UserCheck, UserPlus, Target, Plus, Pencil, X, Save, Calendar } from "lucide-react";
 
 const inputClass = "w-full px-3 py-2.5 rounded-xl bg-brand-soft border border-gray-200 text-body placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent text-sm";
 const labelClass = "block text-xs font-medium text-body uppercase tracking-wider mb-1.5";
@@ -275,23 +275,55 @@ export default function ContactsPage() {
       />
 
       <div className="flex-1 min-h-0 p-6 overflow-auto">
-        {/* Four summary cards - all same style */}
+        {/* Four summary cards - same style as Finance */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Contacts</p>
-            <p className="text-lg font-bold text-brand-dark">2</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-brand-soft to-white border border-brand-light/80 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-brand-dark/80 uppercase tracking-wider mb-1.5">Total Contacts</p>
+                <p className="text-2xl font-bold text-brand-dark tabular-nums tracking-tight">2</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Users className="w-5 h-5 text-brand" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Customers</p>
-            <p className="text-lg font-bold text-success">1</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-teal-50 to-white border border-teal-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-teal-600/90 uppercase tracking-wider mb-1.5">Customers</p>
+                <p className="text-2xl font-bold text-teal-700 tabular-nums tracking-tight">1</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-teal-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <UserCheck className="w-5 h-5 text-teal-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Prospects</p>
-            <p className="text-lg font-bold text-warning">1</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-amber-50 to-white border border-amber-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-amber-600/90 uppercase tracking-wider mb-1.5">Prospects</p>
+                <p className="text-2xl font-bold text-amber-700 tabular-nums tracking-tight">1</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-amber-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Target className="w-5 h-5 text-amber-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Leads</p>
-            <p className="text-lg font-bold text-brand">0</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-blue-50 to-white border border-blue-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-blue-600/90 uppercase tracking-wider mb-1.5">Leads</p>
+                <p className="text-2xl font-bold text-blue-700 tabular-nums tracking-tight">0</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-blue-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <UserPlus className="w-5 h-5 text-blue-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
         </div>
 
@@ -324,29 +356,29 @@ export default function ContactsPage() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1000px] text-sm">
+            <table className="w-max min-w-[1000px] text-sm table-fixed">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-100">
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">#</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Name</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Company</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Title</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Email</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Phone</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">City</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Status</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Source</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Owner</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Last Contact</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Tags</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Actions</th>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="text-right py-3 px-3 font-semibold text-gray-600">#</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Name</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Company</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Title</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Email</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Phone</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">City</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Status</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Source</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Owner</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Last Contact</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Tags</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((row, idx) => (
-                  <tr key={row.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition">
-                    <td className="py-4 px-4 text-body">{idx + 1}</td>
-                    <td className="py-4 px-4">
+                  <tr key={row.id} className="border-b border-gray-100 hover:bg-gray-50/50 transition">
+                    <td className="py-3 px-3 text-right text-body tabular-nums">{idx + 1}</td>
+                    <td className="py-3 px-3">
                       <div className="flex items-center gap-2">
                         <span className="w-9 h-9 rounded-full bg-brand-soft flex items-center justify-center text-brand font-semibold text-xs shrink-0">
                           {row.initials}
@@ -354,31 +386,31 @@ export default function ContactsPage() {
                         <span className="font-medium text-brand-dark">{row.name}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-body">{row.company}</td>
-                    <td className="py-4 px-4 text-body">{row.title}</td>
-                    <td className="py-4 px-4 text-body">{row.email}</td>
-                    <td className="py-4 px-4 text-body">{row.phone}</td>
-                    <td className="py-4 px-4 text-body">{row.city}</td>
-                    <td className="py-4 px-4">
+                    <td className="py-3 px-3 text-body truncate" title={row.company}>{row.company}</td>
+                    <td className="py-3 px-3 text-body truncate" title={row.title}>{row.title}</td>
+                    <td className="py-3 px-3 text-body truncate" title={row.email}>{row.email}</td>
+                    <td className="py-3 px-3 text-body truncate" title={row.phone}>{row.phone}</td>
+                    <td className="py-3 px-3 text-body truncate" title={row.city}>{row.city}</td>
+                    <td className="py-3 px-3">
                       <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_STYLES[row.status] || "bg-gray-100 text-gray-700"}`}>
                         {row.status}
                       </span>
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-3 px-3">
                       <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${SOURCE_STYLES[row.source] || "bg-gray-100 text-gray-700"}`}>
                         {row.source}
                       </span>
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-3 px-3">
                       <div className="flex items-center gap-2">
-                        <span className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-semibold text-xs">
+                        <span className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-semibold text-xs shrink-0">
                           {row.ownerInitials}
                         </span>
-                        <span className="text-body">{row.owner}</span>
+                        <span className="text-body truncate" title={row.owner}>{row.owner}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-body">{row.lastContact}</td>
-                    <td className="py-4 px-4">
+                    <td className="py-3 px-3 text-center text-body tabular-nums whitespace-nowrap">{row.lastContact}</td>
+                    <td className="py-3 px-3">
                       <div className="flex flex-wrap gap-1">
                         {(row.tags?.length ? row.tags : ["-"]).map((tag) => (
                           <span key={tag} className="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-gray-100 text-gray-600">
@@ -387,11 +419,11 @@ export default function ContactsPage() {
                         ))}
                       </div>
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-3 px-3 text-center">
                       <button
                         type="button"
                         onClick={() => {}}
-                        className="p-2 rounded-lg text-body hover:bg-brand-soft hover:text-brand transition"
+                        className="inline-flex p-2 rounded-lg text-body hover:bg-brand-soft hover:text-brand transition"
                         aria-label="Edit contact"
                       >
                         <Pencil className="w-4 h-4" strokeWidth={2} />

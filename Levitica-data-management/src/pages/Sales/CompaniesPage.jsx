@@ -328,45 +328,59 @@ export default function CompaniesPage() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1100px] text-sm">
+            <table className="w-full min-w-[1100px] text-sm table-fixed">
+              <colgroup>
+                <col className="w-12" />
+                <col className="w-[11rem]" />
+                <col className="w-24" />
+                <col className="w-28" />
+                <col className="w-32" />
+                <col className="w-20" />
+                <col className="w-28" />
+                <col className="w-24" />
+                <col className="w-36" />
+                <col className="w-16" />
+                <col className="w-16" />
+                <col className="w-16" />
+              </colgroup>
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-100">
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">#</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Company</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Industry</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">City</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Website</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Employees</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Annual Revenue</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Status</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Owner</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Contacts</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Deals</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Actions</th>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="text-right py-3 px-3 font-semibold text-gray-600">#</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Company</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Industry</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">City</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Website</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Employees</th>
+                  <th className="text-right py-3 px-3 font-semibold text-gray-600">Annual Revenue</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Status</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Owner</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Contacts</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Deals</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((row, idx) => (
-                  <tr key={row.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition">
-                    <td className="py-4 px-4 text-body">{idx + 1}</td>
-                    <td className="py-4 px-4">
-                      <div>
-                        <p className="font-medium text-brand-dark">{row.name}</p>
+                  <tr key={row.id} className="border-b border-gray-100 hover:bg-gray-50/50 transition">
+                    <td className="py-3 px-3 text-right text-body tabular-nums align-top">{idx + 1}</td>
+                    <td className="py-3 px-3 align-top min-w-0">
+                      <div className="min-w-0">
+                        <p className="font-medium text-brand-dark truncate" title={row.name}>{row.name}</p>
                         {row.description && (
-                          <p className="text-xs text-gray-500 mt-0.5">{row.description}</p>
+                          <p className="text-xs text-gray-500 mt-0.5 truncate" title={row.description}>{row.description}</p>
                         )}
                       </div>
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-3 px-3 align-top">
                       <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
                         {row.industry}
                       </span>
                     </td>
-                    <td className="py-4 px-4 text-body">{row.city}</td>
-                    <td className="py-4 px-4 text-body">{row.website}</td>
-                    <td className="py-4 px-4 text-body">{row.employees}</td>
-                    <td className="py-4 px-4 text-body">{row.annualRevenue}</td>
-                    <td className="py-4 px-4">
+                    <td className="py-3 px-3 text-body truncate align-top" title={row.city}>{row.city}</td>
+                    <td className="py-3 px-3 text-body truncate align-top min-w-0" title={row.website}>{row.website}</td>
+                    <td className="py-3 px-3 text-center text-body tabular-nums align-top">{row.employees}</td>
+                    <td className="py-3 px-3 text-right text-body tabular-nums whitespace-nowrap align-top">{row.annualRevenue}</td>
+                    <td className="py-3 px-3 text-center align-top">
                       <span
                         className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${
                           STATUS_STYLES[row.status] || "bg-gray-100 text-gray-700"
@@ -375,25 +389,27 @@ export default function CompaniesPage() {
                         {row.status}
                       </span>
                     </td>
-                    <td className="py-4 px-4">
-                      <div className="flex items-center gap-2">
-                        <span className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-semibold text-xs">
+                    <td className="py-3 px-3 align-top">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-semibold text-xs shrink-0">
                           {row.ownerInitials}
                         </span>
-                        <span className="text-body">{row.owner}</span>
+                        <span className="text-body truncate min-w-0" title={row.owner}>{row.owner}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-body">{row.contacts}</td>
-                    <td className="py-4 px-4 text-body">{row.deals}</td>
-                    <td className="py-4 px-4">
-                      <button
-                        type="button"
-                        onClick={() => {}}
-                        className="p-2 rounded-lg text-body hover:bg-brand-soft hover:text-brand transition"
-                        aria-label="Edit company"
-                      >
-                        <Pencil className="w-4 h-4" strokeWidth={2} />
-                      </button>
+                    <td className="py-3 px-3 text-center text-body tabular-nums align-top">{row.contacts}</td>
+                    <td className="py-3 px-3 text-center text-body tabular-nums align-top">{row.deals}</td>
+                    <td className="py-3 px-3 text-center align-top">
+                      <div className="flex justify-center">
+                        <button
+                          type="button"
+                          onClick={() => {}}
+                          className="inline-flex p-2 rounded-lg text-body hover:bg-brand-soft hover:text-brand transition"
+                          aria-label="Edit company"
+                        >
+                          <Pencil className="w-4 h-4" strokeWidth={2} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

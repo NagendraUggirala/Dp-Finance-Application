@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Bell, ClipboardList, Plus, Pencil, X, Save, CheckSquare, ListTodo, Calendar } from "lucide-react";
+import { Bell, ClipboardList, Plus, Pencil, X, Save, CheckSquare, ListTodo, Calendar, Phone, Mail, AlertCircle } from "lucide-react";
 
 const inputClass =
   "w-full px-3 py-2.5 rounded-xl bg-brand-soft border border-gray-200 text-body placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent text-sm";
@@ -672,31 +672,79 @@ export default function ActivityLogPage() {
       />
 
       <div className="flex-1 min-h-0 p-6 overflow-auto">
-        {/* Summary cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-brand">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Activities</p>
-            <p className="text-lg font-bold text-brand-dark">{activities.length}</p>
+        {/* Summary cards - same style as Finance */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <div className="group rounded-2xl bg-gradient-to-br from-brand-soft to-white border border-brand-light/80 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-brand-dark/80 uppercase tracking-wider mb-1.5">Total Activities</p>
+                <p className="text-2xl font-bold text-brand-dark tabular-nums tracking-tight">{activities.length}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center group-hover:scale-105 transition-transform">
+                <ClipboardList className="w-5 h-5 text-brand" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-teal-500">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Calls</p>
-            <p className="text-lg font-bold text-teal-600">{calls}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-teal-50 to-white border border-teal-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-teal-600/90 uppercase tracking-wider mb-1.5">Calls</p>
+                <p className="text-2xl font-bold text-teal-700 tabular-nums tracking-tight">{calls}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-teal-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Phone className="w-5 h-5 text-teal-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-amber-500">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Emails</p>
-            <p className="text-lg font-bold text-amber-600">{emails}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-amber-50 to-white border border-amber-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-amber-600/90 uppercase tracking-wider mb-1.5">Emails</p>
+                <p className="text-2xl font-bold text-amber-700 tabular-nums tracking-tight">{emails}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-amber-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Mail className="w-5 h-5 text-amber-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-orange-500">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Meetings</p>
-            <p className="text-lg font-bold text-orange-600">{meetings}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-orange-50 to-white border border-orange-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-orange-600/90 uppercase tracking-wider mb-1.5">Meetings</p>
+                <p className="text-2xl font-bold text-orange-700 tabular-nums tracking-tight">{meetings}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-orange-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Calendar className="w-5 h-5 text-orange-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-pink-500">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Overdue Tasks</p>
-            <p className="text-lg font-bold text-pink-600">{overdueTasks}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-red-50 to-white border border-red-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-red-600/90 uppercase tracking-wider mb-1.5">Overdue Tasks</p>
+                <p className="text-2xl font-bold text-red-700 tabular-nums tracking-tight">{overdueTasks}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-red-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <AlertCircle className="w-5 h-5 text-red-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-emerald-500">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Pending Tasks</p>
-            <p className="text-lg font-bold text-emerald-600">{pendingTasks}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-emerald-600/90 uppercase tracking-wider mb-1.5">Pending Tasks</p>
+                <p className="text-2xl font-bold text-emerald-700 tabular-nums tracking-tight">{pendingTasks}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-emerald-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <CheckSquare className="w-5 h-5 text-emerald-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
         </div>
 
@@ -793,27 +841,27 @@ export default function ActivityLogPage() {
 
           <div className="overflow-x-auto">
             {activeTab === "log" ? (
-              <table className="w-full min-w-[1000px] text-sm">
+              <table className="w-max min-w-[1000px] text-sm table-fixed">
                 <thead>
-                  <tr className="bg-gray-50 border-b border-gray-100">
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">#</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Type</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Subject</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Company</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Outcome</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Duration</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Rep</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Deal Linked</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Date</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Recording</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Actions</th>
+                  <tr className="bg-gray-50 border-b border-gray-200">
+                    <th className="text-right py-3 px-3 font-semibold text-gray-600">#</th>
+                    <th className="text-left py-3 px-3 font-semibold text-gray-600">Type</th>
+                    <th className="text-left py-3 px-3 font-semibold text-gray-600">Subject</th>
+                    <th className="text-left py-3 px-3 font-semibold text-gray-600">Company</th>
+                    <th className="text-left py-3 px-3 font-semibold text-gray-600">Outcome</th>
+                    <th className="text-center py-3 px-3 font-semibold text-gray-600">Duration</th>
+                    <th className="text-left py-3 px-3 font-semibold text-gray-600">Rep</th>
+                    <th className="text-left py-3 px-3 font-semibold text-gray-600">Deal Linked</th>
+                    <th className="text-center py-3 px-3 font-semibold text-gray-600">Date</th>
+                    <th className="text-left py-3 px-3 font-semibold text-gray-600">Recording</th>
+                    <th className="text-center py-3 px-3 font-semibold text-gray-600">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.map((row, idx) => (
-                    <tr key={row.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition">
-                      <td className="py-4 px-4 text-body">{idx + 1}</td>
-                      <td className="py-4 px-4">
+                    <tr key={row.id} className="border-b border-gray-100 hover:bg-gray-50/50 transition">
+                      <td className="py-3 px-3 text-right text-body tabular-nums">{idx + 1}</td>
+                      <td className="py-3 px-3">
                         <span
                           className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             TYPE_STYLES[row.type] || "bg-gray-100 text-gray-700"
@@ -822,33 +870,33 @@ export default function ActivityLogPage() {
                           {row.type}
                         </span>
                       </td>
-                      <td className="py-4 px-4">
-                        <div>
-                          <p className="font-medium text-brand-dark">{row.subject}</p>
+                      <td className="py-3 px-3">
+                        <div className="min-w-0">
+                          <p className="font-medium text-brand-dark truncate" title={row.subject}>{row.subject}</p>
                           {row.description && (
-                            <p className="text-xs text-gray-500 mt-0.5">{row.description}</p>
+                            <p className="text-xs text-gray-500 mt-0.5 truncate" title={row.description}>{row.description}</p>
                           )}
                         </div>
                       </td>
-                      <td className="py-4 px-4 text-body">{row.company}</td>
-                      <td className="py-4 px-4 text-body">{row.outcome}</td>
-                      <td className="py-4 px-4 text-body">{row.duration}</td>
-                      <td className="py-4 px-4">
+                      <td className="py-3 px-3 text-body truncate" title={row.company}>{row.company}</td>
+                      <td className="py-3 px-3 text-body truncate" title={row.outcome}>{row.outcome}</td>
+                      <td className="py-3 px-3 text-center text-body tabular-nums">{row.duration}</td>
+                      <td className="py-3 px-3">
                         <div className="flex items-center gap-2">
-                          <span className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-semibold text-xs">
+                          <span className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-semibold text-xs shrink-0">
                             {row.repInitials}
                           </span>
-                          <span className="text-body">{row.rep}</span>
+                          <span className="text-body truncate" title={row.rep}>{row.rep}</span>
                         </div>
                       </td>
-                      <td className="py-4 px-4 text-body">{row.dealLinked}</td>
-                      <td className="py-4 px-4 text-body">{row.date}</td>
-                      <td className="py-4 px-4 text-body">{row.recording}</td>
-                      <td className="py-4 px-4">
+                      <td className="py-3 px-3 text-body truncate" title={row.dealLinked}>{row.dealLinked}</td>
+                      <td className="py-3 px-3 text-center text-body tabular-nums whitespace-nowrap">{row.date}</td>
+                      <td className="py-3 px-3 text-body truncate" title={row.recording}>{row.recording}</td>
+                      <td className="py-3 px-3 text-center">
                         <button
                           type="button"
                           onClick={() => {}}
-                          className="p-2 rounded-lg text-body hover:bg-brand-soft hover:text-brand transition"
+                          className="inline-flex p-2 rounded-lg text-body hover:bg-brand-soft hover:text-brand transition"
                           aria-label="Edit activity"
                         >
                           <Pencil className="w-4 h-4" strokeWidth={2} />
@@ -859,26 +907,26 @@ export default function ActivityLogPage() {
                 </tbody>
               </table>
             ) : (
-              <table className="w-full min-w-[900px] text-sm">
+              <table className="w-max min-w-[900px] text-sm table-fixed">
                 <thead>
-                  <tr className="bg-gray-50 border-b border-gray-100">
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">#</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Type</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Subject</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Company</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Due Date</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Priority</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Status</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Rep</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Deal</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-600">Actions</th>
+                  <tr className="bg-gray-50 border-b border-gray-200">
+                    <th className="text-right py-3 px-3 font-semibold text-gray-600">#</th>
+                    <th className="text-left py-3 px-3 font-semibold text-gray-600">Type</th>
+                    <th className="text-left py-3 px-3 font-semibold text-gray-600">Subject</th>
+                    <th className="text-left py-3 px-3 font-semibold text-gray-600">Company</th>
+                    <th className="text-center py-3 px-3 font-semibold text-gray-600">Due Date</th>
+                    <th className="text-left py-3 px-3 font-semibold text-gray-600">Priority</th>
+                    <th className="text-left py-3 px-3 font-semibold text-gray-600">Status</th>
+                    <th className="text-left py-3 px-3 font-semibold text-gray-600">Rep</th>
+                    <th className="text-left py-3 px-3 font-semibold text-gray-600">Deal</th>
+                    <th className="text-center py-3 px-3 font-semibold text-gray-600">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredTasks.map((row, idx) => (
-                    <tr key={row.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition">
-                      <td className="py-4 px-4 text-body">{idx + 1}</td>
-                      <td className="py-4 px-4">
+                    <tr key={row.id} className="border-b border-gray-100 hover:bg-gray-50/50 transition">
+                      <td className="py-3 px-3 text-right text-body tabular-nums">{idx + 1}</td>
+                      <td className="py-3 px-3">
                         <span
                           className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${
                             TYPE_STYLES[row.type] || "bg-gray-100 text-gray-700"
@@ -887,10 +935,10 @@ export default function ActivityLogPage() {
                           {row.type}
                         </span>
                       </td>
-                      <td className="py-4 px-4 font-medium text-brand-dark">{row.subject}</td>
-                      <td className="py-4 px-4 text-body">{row.company}</td>
-                      <td className="py-4 px-4 text-body">{row.dueDate}</td>
-                      <td className="py-4 px-4">
+                      <td className="py-3 px-3 font-medium text-brand-dark truncate" title={row.subject}>{row.subject}</td>
+                      <td className="py-3 px-3 text-body truncate" title={row.company}>{row.company}</td>
+                      <td className="py-3 px-3 text-center text-body tabular-nums whitespace-nowrap">{row.dueDate}</td>
+                      <td className="py-3 px-3">
                         <span
                           className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             PRIORITY_STYLES[row.priority] || "bg-gray-100 text-gray-700"
@@ -899,7 +947,7 @@ export default function ActivityLogPage() {
                           {row.priority}
                         </span>
                       </td>
-                      <td className="py-4 px-4">
+                      <td className="py-3 px-3">
                         <span
                           className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             TASK_STATUS_STYLES[row.status] || "bg-gray-100 text-gray-700"
@@ -908,21 +956,21 @@ export default function ActivityLogPage() {
                           {row.status}
                         </span>
                       </td>
-                      <td className="py-4 px-4">
+                      <td className="py-3 px-3">
                         <div className="flex items-center gap-2">
-                          <span className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-semibold text-xs">
+                          <span className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-semibold text-xs shrink-0">
                             {row.repInitials}
                           </span>
-                          <span className="text-body">{row.rep}</span>
+                          <span className="text-body truncate" title={row.rep}>{row.rep}</span>
                         </div>
                       </td>
-                      <td className="py-4 px-4 text-body">{row.deal}</td>
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-1">
+                      <td className="py-3 px-3 text-body truncate" title={row.deal}>{row.deal}</td>
+                      <td className="py-3 px-3 text-center">
+                        <div className="flex items-center justify-center gap-1">
                           <button
                             type="button"
                             onClick={() => handleCompleteTask(row.id)}
-                            className="p-2 rounded-lg text-body hover:bg-gray-100 hover:text-success transition"
+                            className="inline-flex p-2 rounded-lg text-body hover:bg-gray-100 hover:text-success transition"
                             aria-label="Mark complete"
                           >
                             <CheckSquare className="w-4 h-4" strokeWidth={2} />
@@ -930,7 +978,7 @@ export default function ActivityLogPage() {
                           <button
                             type="button"
                             onClick={() => {}}
-                            className="p-2 rounded-lg text-body hover:bg-brand-soft hover:text-brand transition"
+                            className="inline-flex p-2 rounded-lg text-body hover:bg-brand-soft hover:text-brand transition"
                             aria-label="Edit task"
                           >
                             <Pencil className="w-4 h-4" strokeWidth={2} />

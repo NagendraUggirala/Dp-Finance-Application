@@ -239,19 +239,43 @@ export default function EmailLogPage() {
       />
 
       <div className="flex-1 min-h-0 p-6 overflow-auto">
-        {/* Summary cards */}
+        {/* Summary cards - same style as Finance */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-brand">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Emails</p>
-            <p className="text-lg font-bold text-brand-dark">{totalEmails}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-brand-soft to-white border border-brand-light/80 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-brand-dark/80 uppercase tracking-wider mb-1.5">Total Emails</p>
+                <p className="text-2xl font-bold text-brand-dark tabular-nums tracking-tight">{totalEmails}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Total</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Mail className="w-5 h-5 text-brand" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-brand">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">This Month</p>
-            <p className="text-lg font-bold text-brand">{thisMonth}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-blue-50 to-white border border-blue-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-blue-600/90 uppercase tracking-wider mb-1.5">This Month</p>
+                <p className="text-2xl font-bold text-blue-700 tabular-nums tracking-tight">{thisMonth}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Count</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-blue-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Calendar className="w-5 h-5 text-blue-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-brand">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Linked to Deals</p>
-            <p className="text-lg font-bold text-brand-dark">{linkedToDeals}</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-teal-50 to-white border border-teal-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-teal-600/90 uppercase tracking-wider mb-1.5">Linked to Deals</p>
+                <p className="text-2xl font-bold text-teal-700 tabular-nums tracking-tight">{linkedToDeals}</p>
+                <p className="text-xs text-gray-500 mt-1.5">Deals</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-teal-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Mail className="w-5 h-5 text-teal-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
         </div>
 
@@ -281,47 +305,65 @@ export default function EmailLogPage() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[800px] text-sm">
+            <table className="w-full min-w-[900px] text-sm table-fixed">
+              <colgroup>
+                <col className="w-12" />
+                <col className="w-28" />
+                <col className="w-[12rem]" />
+                <col className="w-[10rem]" />
+                <col className="w-36" />
+                <col className="w-[10rem]" />
+                <col className="w-48" />
+                <col className="w-16" />
+              </colgroup>
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-100">
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">#</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Date</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Subject</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Company</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Rep</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Deal</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Notes</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-600">Actions</th>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="text-right py-3 px-3 font-semibold text-gray-600">#</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Date</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Subject</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Company</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Rep</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Deal</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Notes</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((row, idx) => (
-                  <tr key={row.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition">
-                    <td className="py-4 px-4 text-body">{idx + 1}</td>
-                    <td className="py-4 px-4 text-body">{row.date}</td>
-                    <td className="py-4 px-4 font-medium text-brand-dark">{row.subject}</td>
-                    <td className="py-4 px-4 text-body">{row.company}</td>
-                    <td className="py-4 px-4">
-                      <div className="flex items-center gap-2">
-                        <span className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-semibold text-xs">
+                  <tr key={row.id} className="border-b border-gray-100 hover:bg-gray-50/50 transition">
+                    <td className="py-3 px-3 text-right text-body tabular-nums align-top">{idx + 1}</td>
+                    <td className="py-3 px-3 text-center text-body tabular-nums whitespace-nowrap align-top">{row.date}</td>
+                    <td className="py-3 px-3 font-medium text-brand-dark align-top min-w-0">
+                      <span className="block truncate" title={row.subject}>{row.subject}</span>
+                    </td>
+                    <td className="py-3 px-3 text-body align-top min-w-0">
+                      <span className="block truncate" title={row.company}>{row.company}</span>
+                    </td>
+                    <td className="py-3 px-3 align-top">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-semibold text-xs shrink-0">
                           {row.repInitials}
                         </span>
-                        <span className="text-body">{row.rep}</span>
+                        <span className="text-body truncate min-w-0" title={row.rep}>{row.rep}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-body">{row.deal}</td>
-                    <td className="py-4 px-4 text-body max-w-[200px] truncate" title={row.notes}>
-                      {row.notes}
+                    <td className="py-3 px-3 text-body align-top min-w-0">
+                      <span className="block truncate" title={row.deal}>{row.deal}</span>
                     </td>
-                    <td className="py-4 px-4">
-                      <button
-                        type="button"
-                        onClick={() => {}}
-                        className="p-2 rounded-lg text-body hover:bg-brand-soft hover:text-brand transition"
-                        aria-label="Edit email"
-                      >
-                        <Pencil className="w-4 h-4" strokeWidth={2} />
-                      </button>
+                    <td className="py-3 px-3 text-body align-top min-w-0">
+                      <span className="block truncate" title={row.notes}>{row.notes}</span>
+                    </td>
+                    <td className="py-3 px-3 text-center align-top w-16">
+                      <div className="flex justify-center">
+                        <button
+                          type="button"
+                          onClick={() => {}}
+                          className="inline-flex p-2 rounded-lg text-body hover:bg-brand-soft hover:text-brand transition"
+                          aria-label="Edit email"
+                        >
+                          <Pencil className="w-4 h-4" strokeWidth={2} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
