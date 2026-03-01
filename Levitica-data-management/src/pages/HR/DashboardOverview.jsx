@@ -1,5 +1,5 @@
 import React from "react";
-import { Zap, User, Banknote, Users, Bell } from "lucide-react";
+import { Zap, User, Banknote, Users, Bell, FileCheck, Clock, UserCheck } from "lucide-react";
 
 const RECENT_ACTIVITY = [
   { type: "joined", title: "Deepak Rao", subtitle: "HR Executive · 2025-03-01", icon: "person" },
@@ -41,27 +41,55 @@ export default function DashboardOverview() {
       </header>
 
       <div className="flex-1 min-h-0 p-6 overflow-auto">
-        {/* Four stat cards - same style as Activity Log page */}
+        {/* Four stat cards - same style as Finance */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-brand">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">My Candidates</p>
-            <p className="text-lg font-bold text-brand-dark">3</p>
-            <p className="text-xs text-gray-500 mt-0.5">Total in pipeline</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-brand-soft to-white border border-brand-light/80 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-brand-dark/80 uppercase tracking-wider mb-1.5">My Candidates</p>
+                <p className="text-2xl font-bold text-brand-dark tabular-nums tracking-tight">3</p>
+                <p className="text-xs text-gray-500 mt-1.5">Total in pipeline</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Users className="w-5 h-5 text-brand" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-teal-500">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Offers Done</p>
-            <p className="text-lg font-bold text-teal-600">2</p>
-            <p className="text-xs text-gray-500 mt-0.5">Offers accepted</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-teal-50 to-white border border-teal-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-teal-600/90 uppercase tracking-wider mb-1.5">Offers Done</p>
+                <p className="text-2xl font-bold text-teal-700 tabular-nums tracking-tight">2</p>
+                <p className="text-xs text-gray-500 mt-1.5">Offers accepted</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-teal-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <FileCheck className="w-5 h-5 text-teal-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-orange-500">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Offers Pending</p>
-            <p className="text-lg font-bold text-orange-600">1</p>
-            <p className="text-xs text-gray-500 mt-0.5">Awaiting response</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-amber-50 to-white border border-amber-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-amber-600/90 uppercase tracking-wider mb-1.5">Offers Pending</p>
+                <p className="text-2xl font-bold text-amber-700 tabular-nums tracking-tight">1</p>
+                <p className="text-xs text-gray-500 mt-1.5">Awaiting response</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-amber-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Clock className="w-5 h-5 text-amber-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-violet-500">
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Joined</p>
-            <p className="text-lg font-bold text-violet-600">1</p>
-            <p className="text-xs text-gray-500 mt-0.5">Onboarded</p>
+          <div className="group rounded-2xl bg-gradient-to-br from-violet-50 to-white border border-violet-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-violet-600/90 uppercase tracking-wider mb-1.5">Joined</p>
+                <p className="text-2xl font-bold text-violet-700 tabular-nums tracking-tight">1</p>
+                <p className="text-xs text-gray-500 mt-1.5">Onboarded</p>
+              </div>
+              <span className="w-11 h-11 rounded-xl bg-violet-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <UserCheck className="w-5 h-5 text-violet-600" strokeWidth={2} />
+              </span>
+            </div>
           </div>
         </div>
 

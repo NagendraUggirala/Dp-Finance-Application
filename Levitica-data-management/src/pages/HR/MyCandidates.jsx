@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Bell, Search, UserPlus, X, Save, Calendar, Pencil } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Bell, Search, UserPlus, X, Save, Calendar, Pencil, Users, FileCheck, Clock, UserCheck, UserX, Upload, FileSpreadsheet } from "lucide-react";
+import * as XLSX from "xlsx";
 
 const getInitials = (name) =>
   name
@@ -111,8 +112,37 @@ const defaultForm = {
   offerStatus: "",
 };
 
-function AddCandidateModal({ open, onClose, onSave }) {
+function parseTechnical(technical) {
+  if (!technical || technical === "Not Yet") return { round: "Not Yet", type: "" };
+  const parts = String(technical).split(/\s*\/\s*/);
+  return { round: parts[0] || "Not Yet", type: parts[1] || "" };
+}
+
+function AddCandidateModal({ open, onClose, onSave, candidate: editingCandidate }) {
   const [form, setForm] = useState(defaultForm);
+
+  useEffect(() => {
+    if (!open) return;
+    if (editingCandidate) {
+      const { round: technicalRound, type: techRoundType } = parseTechnical(editingCandidate.technical);
+      setForm({
+        fullName: editingCandidate.name || "",
+        positionApplied: editingCandidate.position || "",
+        department: editingCandidate.dept === "—" ? "" : (editingCandidate.dept || ""),
+        interviewDate: editingCandidate.interviewDate === "—" ? "" : (editingCandidate.interviewDate || ""),
+        cameForInterview: editingCandidate.came === "—" ? "" : (editingCandidate.came || ""),
+        recruiter: editingCandidate.recruiter?.name || "Priya Nair",
+        screeningCall: editingCandidate.screening || "Not Yet",
+        technicalRound,
+        techRoundType,
+        hrRound: editingCandidate.hrRound || "Not Yet",
+        salary: "",
+        offerStatus: editingCandidate.offer === "—" ? "" : (editingCandidate.offer || ""),
+      });
+    } else {
+      setForm(defaultForm);
+    }
+  }, [open, editingCandidate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -128,10 +158,16 @@ function AddCandidateModal({ open, onClose, onSave }) {
         : form.techRoundType
           ? `${form.technicalRound} / ${form.techRoundType}`
           : form.technicalRound;
+    const id = editingCandidate?.id ?? Date.now();
+    const onboarding =
+      form.offerStatus === "Done"
+        ? (editingCandidate?.onboarding === "Completed" ? "Completed" : "In Progress")
+        : editingCandidate?.onboarding ?? null;
+    const joiningDate = editingCandidate?.joiningDate ?? null;
     const newCandidate = {
-      id: Date.now(),
+      id,
       name: form.fullName.trim(),
-      note: null,
+      note: editingCandidate?.note ?? null,
       position: form.positionApplied.trim(),
       dept: form.department.trim() || "—",
       interviewDate: form.interviewDate || "—",
@@ -140,12 +176,12 @@ function AddCandidateModal({ open, onClose, onSave }) {
       technical: technicalDisplay,
       hrRound: form.hrRound,
       offer: form.offerStatus || "—",
-      onboarding: form.offerStatus === "Done" ? "In Progress" : null,
-      joiningDate: null,
-      referredBy: null,
+      onboarding,
+      joiningDate: joiningDate || null,
+      referredBy: editingCandidate?.referredBy ?? null,
       recruiter: { initials: getInitials(recruiterName), name: recruiterName },
     };
-    onSave(newCandidate);
+    onSave(newCandidate, !!editingCandidate);
     setForm(defaultForm);
     onClose();
   };
@@ -157,7 +193,7 @@ function AddCandidateModal({ open, onClose, onSave }) {
       <div className="absolute inset-0 bg-black/50" onClick={onClose} aria-hidden />
       <div className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-xl border border-gray-100">
         <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between shrink-0">
-          <h2 className="text-lg font-bold text-brand-dark">Add Candidate</h2>
+          <h2 className="text-lg font-bold text-brand-dark">{editingCandidate ? "Edit Candidate" : "Add Candidate"}</h2>
           <button
             type="button"
             onClick={onClose}
@@ -323,13 +359,350 @@ function AddCandidateModal({ open, onClose, onSave }) {
   );
 }
 
+const MAX_IMPORT_ROWS = 500;
+const MAX_FILE_SIZE_MB = 5;
+
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).filter((line) => line.trim());
+  if (lines.length < 2) return [];
+  const headers = lines[0].split(",").map((h) => h.trim().replace(/^"|"$/g, ""));
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const values = [];
+    let current = "";
+    let inQuotes = false;
+    for (let j = 0; j < lines[i].length; j++) {
+      const ch = lines[i][j];
+      if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if ((ch === "," && !inQuotes) || (ch === "\n" && !inQuotes)) {
+        values.push(current.trim());
+        current = "";
+        if (ch === "\n") break;
+      } else {
+        current += ch;
+      }
+    }
+    values.push(current.trim());
+    const obj = {};
+    headers.forEach((h, idx) => {
+      obj[h] = values[idx] != null ? String(values[idx]).trim() : "";
+    });
+    rows.push(obj);
+  }
+  return rows;
+}
+
+function normalizeHeader(h) {
+  return String(h || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
+
+const HEADER_ALIASES = {
+  name: ["name", "full name", "candidate name", "candidate"],
+  position: ["position", "position applied", "role", "job title"],
+  department: ["department", "dept"],
+  "interview date": ["interview date", "date", "interview date"],
+  came: ["came", "came for interview", "attended"],
+  screening: ["screening", "screening call"],
+  technical: ["technical", "technical round", "tech round"],
+  "hr round": ["hr round", "hr round"],
+  offer: ["offer", "offer status"],
+  onboarding: ["onboarding"],
+  "joining date": ["joining date", "joining date", "join date"],
+  note: ["note", "notes"],
+  "referred by": ["referred by", "referral", "referred by"],
+  recruiter: ["recruiter"],
+};
+
+function mapRowToCandidate(row, headerMap, baseId) {
+  const get = (key) => {
+    const col = headerMap[key];
+    const val = col != null && row[col] !== undefined ? String(row[col]).trim() : "";
+    return val || null;
+  };
+  const name = get("name");
+  if (!name) return null;
+  const recruiterName = get("recruiter") || "Priya Nair";
+  return {
+    id: baseId,
+    name,
+    note: get("note") || null,
+    position: get("position") || "—",
+    dept: get("department") || "—",
+    interviewDate: get("interview date") || "—",
+    came: get("came") || "—",
+    screening: get("screening") || "Not Yet",
+    technical: get("technical") || "Not Yet",
+    hrRound: get("hr round") || "Not Yet",
+    offer: get("offer") || "—",
+    onboarding: get("onboarding") || null,
+    joiningDate: get("joining date") || null,
+    referredBy: get("referred by") ? { initials: getInitials(get("referred by")), name: get("referred by"), phone: "" } : null,
+    recruiter: { initials: getInitials(recruiterName), name: recruiterName },
+  };
+}
+
+function buildHeaderMap(rawHeaders) {
+  const normalized = rawHeaders.map((h) => normalizeHeader(h));
+  const raw = [...rawHeaders];
+  const getKey = (aliases) => {
+    const idx = normalized.findIndex((n) => aliases.some((a) => n === a || (n && n.includes(a))));
+    return idx >= 0 ? raw[idx] : null;
+  };
+  return {
+    name: getKey(HEADER_ALIASES.name) ?? getKey(["name"]),
+    position: getKey(HEADER_ALIASES.position),
+    department: getKey(HEADER_ALIASES.department),
+    "interview date": getKey(HEADER_ALIASES["interview date"]),
+    came: getKey(HEADER_ALIASES.came),
+    screening: getKey(HEADER_ALIASES.screening),
+    technical: getKey(HEADER_ALIASES.technical),
+    "hr round": getKey(HEADER_ALIASES["hr round"]),
+    offer: getKey(HEADER_ALIASES.offer),
+    onboarding: getKey(HEADER_ALIASES.onboarding),
+    "joining date": getKey(HEADER_ALIASES["joining date"]),
+    note: getKey(HEADER_ALIASES.note),
+    "referred by": getKey(HEADER_ALIASES["referred by"]),
+    recruiter: getKey(HEADER_ALIASES.recruiter),
+  };
+}
+
+function ImportCandidatesModal({ open, onClose, onImport }) {
+  const [dragOver, setDragOver] = useState(false);
+  const [file, setFile] = useState(null);
+  const [error, setError] = useState("");
+  const [parsed, setParsed] = useState([]);
+
+  const reset = () => {
+    setFile(null);
+    setError("");
+    setParsed([]);
+  };
+
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
+
+  const parseFile = (fileObj) => {
+    setError("");
+    setParsed([]);
+    const isCSV = fileObj.name.toLowerCase().endsWith(".csv");
+    const isXLSX = fileObj.name.toLowerCase().endsWith(".xlsx") || fileObj.name.toLowerCase().endsWith(".xls");
+    if (!isCSV && !isXLSX) {
+      setError("Please upload a .csv or .xlsx file.");
+      return;
+    }
+    if (fileObj.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+      setError(`File must be under ${MAX_FILE_SIZE_MB} MB.`);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        let rows = [];
+        let rawHeaders = [];
+        if (isCSV) {
+          const text = e.target?.result ?? "";
+          const lines = text.split(/\r?\n/).filter((l) => l.trim());
+          if (lines.length < 2) {
+            setError("No valid rows found. First row should be headers.");
+            return;
+          }
+          rawHeaders = lines[0].split(",").map((h) => h.trim().replace(/^"|"$/g, ""));
+          rows = parseCSV(text);
+        } else {
+          const data = new Uint8Array(e.target?.result);
+          const wb = XLSX.read(data, { type: "array" });
+          const firstSheet = wb.SheetNames[0];
+          if (!firstSheet) {
+            setError("No sheet found in the workbook.");
+            return;
+          }
+          const sheet = wb.Sheets[firstSheet];
+          const json = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+          if (!json.length) {
+            setError("No valid rows found.");
+            return;
+          }
+          rawHeaders = json[0].map((h) => String(h ?? "").trim());
+          rows = json.slice(1).map((row) => {
+            const obj = {};
+            rawHeaders.forEach((h, i) => {
+              obj[h] = row[i] != null ? String(row[i]).trim() : "";
+            });
+            return obj;
+          });
+        }
+        rows = rows.filter((r) => rawHeaders.some((h) => r[h] !== undefined && String(r[h]).trim() !== ""));
+        if (rows.length > MAX_IMPORT_ROWS) {
+          rows = rows.slice(0, MAX_IMPORT_ROWS);
+          setError(`Only first ${MAX_IMPORT_ROWS} rows will be imported.`);
+        }
+        const map = buildHeaderMap(rawHeaders);
+        const baseId = Date.now();
+        const candidates = [];
+        for (let i = 0; i < rows.length; i++) {
+          const c = mapRowToCandidate(rows[i], map, baseId + i);
+          if (c) candidates.push(c);
+        }
+        if (candidates.length === 0) {
+          setError("No valid candidates found. Ensure the first column has a 'Name' (or similar) header and at least one data row.");
+          return;
+        }
+        setParsed(candidates);
+      } catch (err) {
+        setError(err?.message || "Failed to parse file.");
+      }
+    };
+    if (isCSV) reader.readAsText(fileObj);
+    else reader.readAsArrayBuffer(fileObj);
+  };
+
+  const handleFileSelect = (e) => {
+    const f = e.target?.files?.[0];
+    if (f) {
+      setFile(f);
+      parseFile(f);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragOver(false);
+    const f = e.dataTransfer?.files?.[0];
+    if (f) {
+      setFile(f);
+      parseFile(f);
+    }
+  };
+
+  const handleImport = () => {
+    if (parsed.length) {
+      onImport(parsed);
+      handleClose();
+    }
+  };
+
+  const previewCount = Math.min(10, parsed.length);
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/50" onClick={handleClose} aria-hidden />
+      <div className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col bg-white rounded-2xl shadow-xl border border-gray-100">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0">
+          <h2 className="text-lg font-bold text-brand-dark">Import from Excel / CSV</h2>
+          <button type="button" onClick={handleClose} className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 hover:bg-gray-100 transition" aria-label="Close">
+            <X className="w-5 h-5" strokeWidth={2} />
+          </button>
+        </div>
+        <div className="p-6 overflow-y-auto flex-1 min-h-0 space-y-4">
+          <p className="text-sm text-body">
+            Upload a .csv or .xlsx file. The first row must be headers. Expected columns (case-insensitive): Name, Position, Department, Interview Date, Came, Screening, Technical, HR Round, Offer, Onboarding, Joining Date, Note, Referred By, Recruiter.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              const headers = ["Name", "Position", "Department", "Interview Date", "Came", "Screening", "Technical", "HR Round", "Offer", "Onboarding", "Joining Date", "Note", "Referred By", "Recruiter"];
+              const example = ["Jane Doe", "Frontend Developer", "Engineering", "2025-03-15", "Yes", "Pass", "Pass / Virtual", "Pending", "Pending", "", "", "Referred by team lead", "Amit Verma", "Priya Nair"];
+              const escape = (v) => { const s = v != null ? String(v) : ""; return s.includes(",") || s.includes('"') ? `"${s.replace(/"/g, '""')}"` : s; };
+              const csv = ["\uFEFF" + headers.map(escape).join(","), example.map(escape).join(",")].join("\r\n");
+              const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+              const a = document.createElement("a");
+              a.href = URL.createObjectURL(blob);
+              a.download = "candidates-import-template.csv";
+              a.click();
+              URL.revokeObjectURL(a.href);
+            }}
+            className="inline-flex items-center gap-2 text-sm font-medium text-brand hover:underline"
+          >
+            <FileSpreadsheet className="w-4 h-4" strokeWidth={2} />
+            Download template (CSV)
+          </button>
+          <label
+            className={`flex flex-col items-center justify-center rounded-xl border-2 border-dashed py-8 px-6 cursor-pointer transition ${dragOver ? "border-brand bg-brand-soft/50" : "border-gray-200 hover:border-brand hover:bg-brand-soft/30"}`}
+            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+            onDragLeave={(e) => { e.preventDefault(); setDragOver(false); }}
+            onDrop={handleDrop}
+          >
+            <input type="file" accept=".csv,.xlsx,.xls" className="hidden" onChange={handleFileSelect} />
+            <Upload className="w-10 h-10 text-gray-400 mb-2" strokeWidth={2} />
+            <p className="text-sm font-medium text-brand-dark">{file ? file.name : "Drop file here or click to browse"}</p>
+            <p className="text-xs text-body mt-1">Accepted .csv, .xlsx · Max {MAX_FILE_SIZE_MB} MB · Max {MAX_IMPORT_ROWS} rows</p>
+          </label>
+          {error && <p className="text-sm text-danger">{error}</p>}
+          {parsed.length > 0 && (
+            <>
+              <p className="text-sm font-semibold text-brand-dark">Found {parsed.length} candidate{parsed.length !== 1 ? "s" : ""}. Preview (first {previewCount}):</p>
+              <div className="overflow-x-auto border border-gray-200 rounded-xl">
+                <table className="w-full text-sm table-fixed">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-200">
+                      <th className="text-left py-2 px-3 font-semibold text-gray-600">Name</th>
+                      <th className="text-left py-2 px-3 font-semibold text-gray-600">Position</th>
+                      <th className="text-left py-2 px-3 font-semibold text-gray-600">Department</th>
+                      <th className="text-left py-2 px-3 font-semibold text-gray-600">Interview Date</th>
+                      <th className="text-center py-2 px-3 font-semibold text-gray-600">Offer</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {parsed.slice(0, previewCount).map((c, i) => (
+                      <tr key={c.id} className="border-b border-gray-100">
+                        <td className="py-2 px-3 text-body truncate" title={c.name}>{c.name}</td>
+                        <td className="py-2 px-3 text-body truncate" title={c.position}>{c.position}</td>
+                        <td className="py-2 px-3 text-body truncate" title={c.dept}>{c.dept}</td>
+                        <td className="py-2 px-3 text-body truncate">{c.interviewDate}</td>
+                        <td className="py-2 px-3 text-center text-body">{c.offer}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+        </div>
+        <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between shrink-0">
+          <button type="button" onClick={handleClose} className="px-4 py-2.5 rounded-xl border border-gray-200 text-body hover:bg-gray-50 font-medium text-sm transition">Cancel</button>
+          {parsed.length > 0 ? (
+            <button type="button" onClick={handleImport} className="px-4 py-2.5 rounded-xl bg-brand text-white font-semibold hover:bg-brand-dark transition text-sm">
+              Import {parsed.length} candidate{parsed.length !== 1 ? "s" : ""}
+            </button>
+          ) : (
+            <span className="text-sm text-gray-400">Upload a file to continue</span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function MyCandidates() {
   const [candidates, setCandidates] = useState(INITIAL_CANDIDATES);
   const [search, setSearch] = useState("");
   const [addModalOpen, setAddModalOpen] = useState(false);
+  const [editingCandidate, setEditingCandidate] = useState(null);
 
-  const handleAddCandidate = (newCandidate) => {
-    setCandidates((prev) => [newCandidate, ...prev]);
+  const [importModalOpen, setImportModalOpen] = useState(false);
+
+  const handleSaveCandidate = (payload, isEdit) => {
+    if (isEdit) {
+      setCandidates((prev) => prev.map((c) => (c.id === payload.id ? payload : c)));
+    } else {
+      setCandidates((prev) => [payload, ...prev]);
+    }
+    setEditingCandidate(null);
+    setAddModalOpen(false);
+  };
+
+  const handleBulkImport = (candidatesToAdd) => {
+    if (candidatesToAdd?.length) {
+      setCandidates((prev) => [...candidatesToAdd, ...prev]);
+    }
   };
 
   return (
@@ -354,19 +727,37 @@ export default function MyCandidates() {
           </button>
           <button
             type="button"
-            onClick={() => setAddModalOpen(true)}
+            onClick={() => { setEditingCandidate(null); setAddModalOpen(true); }}
             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand text-white font-semibold hover:bg-brand-dark transition"
           >
             <UserPlus className="w-5 h-5" strokeWidth={2} />
             Add Candidate
           </button>
+          <button
+            type="button"
+            onClick={() => setImportModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 text-body font-semibold hover:bg-gray-50 transition"
+          >
+            <Upload className="w-5 h-5" strokeWidth={2} />
+            Import from Excel
+          </button>
         </div>
       </header>
 
-      <AddCandidateModal open={addModalOpen} onClose={() => setAddModalOpen(false)} onSave={handleAddCandidate} />
+      <AddCandidateModal
+        open={addModalOpen}
+        onClose={() => { setAddModalOpen(false); setEditingCandidate(null); }}
+        onSave={handleSaveCandidate}
+        candidate={editingCandidate}
+      />
+      <ImportCandidatesModal
+        open={importModalOpen}
+        onClose={() => setImportModalOpen(false)}
+        onImport={handleBulkImport}
+      />
 
       <div className="flex-1 min-h-0 p-6 overflow-auto">
-        {/* Summary cards - same style as HR Dashboard / Activity Log */}
+        {/* Summary cards - same style as Finance */}
         {(() => {
           const total = candidates.length;
           const came = candidates.filter((c) => c.came === "Yes").length;
@@ -376,31 +767,78 @@ export default function MyCandidates() {
           const rejected = candidates.filter((c) => c.offer === "Rejected").length;
           const cameRate = total ? Math.round((came / total) * 100) : 0;
           return (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-              <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-brand">
-                <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Total</p>
-                <p className="text-lg font-bold text-brand-dark">{total}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+              <div className="group rounded-2xl bg-gradient-to-br from-brand-soft to-white border border-brand-light/80 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-[11px] font-semibold text-brand-dark/80 uppercase tracking-wider mb-1.5">Total</p>
+                    <p className="text-2xl font-bold text-brand-dark tabular-nums tracking-tight">{total}</p>
+                    <p className="text-xs text-gray-500 mt-1.5">Candidates</p>
+                  </div>
+                  <span className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <Users className="w-5 h-5 text-brand" strokeWidth={2} />
+                  </span>
+                </div>
               </div>
-              <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-teal-500">
-                <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Came for Interview</p>
-                <p className="text-lg font-bold text-teal-600">{came}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{cameRate}% rate</p>
+              <div className="group rounded-2xl bg-gradient-to-br from-teal-50 to-white border border-teal-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-[11px] font-semibold text-teal-600/90 uppercase tracking-wider mb-1.5">Came for Interview</p>
+                    <p className="text-2xl font-bold text-teal-700 tabular-nums tracking-tight">{came}</p>
+                    <p className="text-xs text-gray-500 mt-1.5">{cameRate}% rate</p>
+                  </div>
+                  <span className="w-11 h-11 rounded-xl bg-teal-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <UserCheck className="w-5 h-5 text-teal-600" strokeWidth={2} />
+                  </span>
+                </div>
               </div>
-              <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-emerald-500">
-                <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Offers Done</p>
-                <p className="text-lg font-bold text-emerald-600">{offersDone}</p>
+              <div className="group rounded-2xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-[11px] font-semibold text-emerald-600/90 uppercase tracking-wider mb-1.5">Offers Done</p>
+                    <p className="text-2xl font-bold text-emerald-700 tabular-nums tracking-tight">{offersDone}</p>
+                    <p className="text-xs text-gray-500 mt-1.5">Accepted</p>
+                  </div>
+                  <span className="w-11 h-11 rounded-xl bg-emerald-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <FileCheck className="w-5 h-5 text-emerald-600" strokeWidth={2} />
+                  </span>
+                </div>
               </div>
-              <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-orange-500">
-                <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Offer Pending</p>
-                <p className="text-lg font-bold text-orange-600">{offerPending}</p>
+              <div className="group rounded-2xl bg-gradient-to-br from-amber-50 to-white border border-amber-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-[11px] font-semibold text-amber-600/90 uppercase tracking-wider mb-1.5">Offer Pending</p>
+                    <p className="text-2xl font-bold text-amber-700 tabular-nums tracking-tight">{offerPending}</p>
+                    <p className="text-xs text-gray-500 mt-1.5">Awaiting response</p>
+                  </div>
+                  <span className="w-11 h-11 rounded-xl bg-amber-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <Clock className="w-5 h-5 text-amber-600" strokeWidth={2} />
+                  </span>
+                </div>
               </div>
-              <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-violet-500">
-                <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Joined</p>
-                <p className="text-lg font-bold text-violet-600">{joined}</p>
+              <div className="group rounded-2xl bg-gradient-to-br from-violet-50 to-white border border-violet-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-[11px] font-semibold text-violet-600/90 uppercase tracking-wider mb-1.5">Joined</p>
+                    <p className="text-2xl font-bold text-violet-700 tabular-nums tracking-tight">{joined}</p>
+                    <p className="text-xs text-gray-500 mt-1.5">Onboarded</p>
+                  </div>
+                  <span className="w-11 h-11 rounded-xl bg-violet-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <UserCheck className="w-5 h-5 text-violet-600" strokeWidth={2} />
+                  </span>
+                </div>
               </div>
-              <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm border-l-4 border-l-rose-500">
-                <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Rejected</p>
-                <p className="text-lg font-bold text-rose-600">{rejected}</p>
+              <div className="group rounded-2xl bg-gradient-to-br from-red-50 to-white border border-red-100/60 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-[11px] font-semibold text-red-600/90 uppercase tracking-wider mb-1.5">Rejected</p>
+                    <p className="text-2xl font-bold text-red-700 tabular-nums tracking-tight">{rejected}</p>
+                    <p className="text-xs text-gray-500 mt-1.5">Count</p>
+                  </div>
+                  <span className="w-11 h-11 rounded-xl bg-red-100/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <UserX className="w-5 h-5 text-red-600" strokeWidth={2} />
+                  </span>
+                </div>
               </div>
             </div>
           );
@@ -431,57 +869,57 @@ export default function MyCandidates() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-max min-w-[1100px] text-sm table-fixed">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-100">
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">S.no</th>
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">Candidate</th>
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">Position / Dept</th>
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">Interview Date</th>
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">Came</th>
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">Screening</th>
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">Technical</th>
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">HR Round</th>
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">Offer</th>
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">Onboarding</th>
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">Joining Date</th>
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">Referred By</th>
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">Recruiter</th>
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">Pipeline</th>
-                  <th className="px-4 py-4 text-left font-semibold text-body uppercase tracking-wider whitespace-nowrap">Actions</th>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="text-right py-3 px-3 font-semibold text-gray-600">S.no</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Candidate</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Position / Dept</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Interview Date</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Came</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Screening</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Technical</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">HR Round</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Offer</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Onboarding</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Joining Date</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Referred By</th>
+                  <th className="text-left py-3 px-3 font-semibold text-gray-600">Recruiter</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Pipeline</th>
+                  <th className="text-center py-3 px-3 font-semibold text-gray-600">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {candidates.map((c, i) => (
-                  <tr key={c.id} className="border-b border-gray-100 hover:bg-gray-50/50">
-                    <td className="px-4 py-4 text-body whitespace-nowrap">{i + 1}</td>
-                    <td className="px-4 py-4 max-w-[220px]">
+                  <tr key={c.id} className="border-b border-gray-100 hover:bg-gray-50/50 transition">
+                    <td className="py-3 px-3 text-right text-body tabular-nums">{i + 1}</td>
+                    <td className="py-3 px-3 max-w-[220px]">
                       <span className="font-medium text-brand-dark block truncate" title={c.name}>{c.name}</span>
                       {c.note && <span className="text-xs text-body block truncate mt-0.5" title={c.note}>{c.note}</span>}
                     </td>
-                    <td className="px-4 py-4 max-w-[180px]">
+                    <td className="py-3 px-3 max-w-[180px]">
                       <span className="font-medium text-brand-dark block truncate" title={c.position}>{c.position}</span>
                       <span className="text-xs text-body block truncate mt-0.5" title={c.dept}>{c.dept}</span>
                     </td>
-                    <td className="px-4 py-4 text-body whitespace-nowrap">{c.interviewDate}</td>
-                    <td className="px-4 py-4 whitespace-nowrap"><Badge>{c.came}</Badge></td>
-                    <td className="px-4 py-4 whitespace-nowrap"><Badge>{c.screening}</Badge></td>
-                    <td className="px-4 py-4 whitespace-nowrap"><Badge>{c.technical}</Badge></td>
-                    <td className="px-4 py-4 whitespace-nowrap">
+                    <td className="py-3 px-3 text-body whitespace-nowrap">{c.interviewDate}</td>
+                    <td className="py-3 px-3 text-center whitespace-nowrap"><Badge>{c.came}</Badge></td>
+                    <td className="py-3 px-3 text-center whitespace-nowrap"><Badge>{c.screening}</Badge></td>
+                    <td className="py-3 px-3 text-center whitespace-nowrap"><Badge>{c.technical}</Badge></td>
+                    <td className="py-3 px-3 text-center whitespace-nowrap">
                       <Badge variant={c.hrRound === "Pending" ? "warning" : "success"}>{c.hrRound}</Badge>
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
+                    <td className="py-3 px-3 text-center whitespace-nowrap">
                       <Badge variant={c.offer === "Pending" ? "warning" : "success"}>{c.offer}</Badge>
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
+                    <td className="py-3 px-3 text-center whitespace-nowrap">
                       {c.onboarding ? (
                         <Badge variant={c.onboarding === "In Progress" ? "info" : "success"}>{c.onboarding}</Badge>
                       ) : (
                         <span className="text-gray-300">—</span>
                       )}
                     </td>
-                    <td className="px-4 py-4 text-body whitespace-nowrap">{c.joiningDate || "—"}</td>
-                    <td className="px-4 py-4 max-w-[160px]">
+                    <td className="py-3 px-3 text-body whitespace-nowrap">{c.joiningDate || "—"}</td>
+                    <td className="py-3 px-3 max-w-[160px]">
                       {c.referredBy ? (
                         <span className="inline-flex items-center gap-1.5 min-w-0">
                           <span className="w-6 h-6 rounded-full bg-success/20 flex items-center justify-center text-success font-semibold text-[10px] shrink-0">{c.referredBy.initials}</span>
@@ -494,28 +932,30 @@ export default function MyCandidates() {
                         <span className="text-gray-300">—</span>
                       )}
                     </td>
-                    <td className="px-4 py-4 max-w-[140px]">
+                    <td className="py-3 px-3 max-w-[140px]">
                       <span className="inline-flex items-center gap-1.5 min-w-0">
                         <span className="w-6 h-6 rounded-full bg-success/20 flex items-center justify-center text-success font-semibold text-[10px] shrink-0">{c.recruiter.initials}</span>
                         <span className="font-medium text-brand-dark text-xs truncate" title={c.recruiter.name}>{c.recruiter.name}</span>
                       </span>
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-1">
+                    <td className="py-3 px-3 text-center whitespace-nowrap">
+                      <div className="flex items-center justify-center gap-1">
                         {getPipelineSegments(c).map((color, idx) => (
                           <span key={idx} className={`w-2 h-5 rounded-sm shrink-0 ${color}`} title={["Screening", "Technical", "HR Round", "Offer", "Onboarding", "Joined"][idx]} />
                         ))}
                       </div>
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <button
-                        type="button"
-                        onClick={() => {}}
-                        className="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-warning hover:bg-warning/10 hover:border-warning/50 transition"
-                        aria-label="Edit candidate"
-                      >
-                        <Pencil className="w-4 h-4" strokeWidth={2} />
-                      </button>
+                    <td className="py-3 px-3 text-center">
+                      <div className="flex items-center justify-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => { setEditingCandidate(c); setAddModalOpen(true); }}
+                          className="inline-flex p-2 rounded-lg text-body hover:bg-brand-soft hover:text-brand transition"
+                          aria-label="Edit candidate"
+                        >
+                          <Pencil className="w-4 h-4" strokeWidth={2} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
