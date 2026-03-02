@@ -46,24 +46,44 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-brand-light">
-      {/* Login card - dvskillhub theme: white card, soft shadow, rounded */}
-      <div className="relative z-10 w-full max-w-xl rounded-2xl bg-white shadow-sm border border-gray-100 p-8 sm:p-10">
-        {/* Logo + title - brand colors */}
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-12 h-12 rounded-xl bg-brand flex items-center justify-center text-white font-bold text-lg shadow-sm">
-            LD
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-brand-dark">Levitica Data Management</h1>
-            <p className="text-xs text-body">
-              Data &amp; Analytics Platform
-            </p>
-          </div>
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-500 to-white">
+      {/* Two-column card: logo left, form right (like template) */}
+      <div className="relative z-10 w-full max-w-6xl rounded-2xl bg-white shadow-lg border border-gray-100 overflow-hidden flex flex-col md:flex-row min-h-[640px]">
+        {/* Left section: logo display (hidden on mobile; shown inline in right section instead) */}
+        <div className="hidden md:flex relative w-full md:w-[42%] min-h-0 bg-gradient-to-br from-blue-50 to-white items-center justify-center p-8 overflow-hidden">
+          {/* Decorative shapes (template-style) */}
+          <div className="absolute top-0 right-0 w-32 h-32 md:w-40 md:h-40 rounded-full bg-blue-500/10 -translate-y-1/2 translate-x-1/2" aria-hidden />
+          <div className="absolute bottom-0 left-0 w-48 h-48 md:w-56 md:h-56 rounded-full bg-blue-500/15 translate-y-1/3 -translate-x-1/3" aria-hidden />
+          <div className="absolute top-1/2 left-1/2 w-24 h-24 rounded-full bg-white/60 -translate-x-1/2 -translate-y-1/2" aria-hidden />
+          {/* Logo */}
+          <img
+            src="/assets/logo.png"
+            alt="Levitica Data Management"
+            className="relative z-10 h-50 md:h-68 w-auto max-w-[280px] md:max-w-[320px] object-contain drop-shadow-sm"
+          />
         </div>
 
-        {/* Form - dvskillhub-style: labels above, bg-blue-50 / brand-soft inputs, focus:ring-brand */}
-        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+        {/* Right section: form */}
+        <div className="flex-1 flex flex-col p-6 sm:p-10">
+          {/* Responsive: small inline logo + text (mobile only) */}
+          <div className="flex md:hidden items-center gap-3 mb-4 pb-4 border-b border-gray-100">
+            <img
+              src="/assets/logo.png"
+              alt=""
+              className="h-10 w-auto max-w-[100px] object-contain shrink-0"
+            />
+            <div className="min-w-0">
+              <h1 className="text-sm font-bold text-brand-dark leading-tight">Levitica Data Management</h1>
+              <p className="text-[11px] text-body">Data &amp; Analytics Platform</p>
+            </div>
+          </div>
+          {/* Desktop: title block (hidden on mobile) */}
+          <div className="hidden md:block m-10">
+            <h1 className="text-xl font-bold text-brand-dark">Levitica Data Management</h1>
+            <p className="text-xs text-body mt-0.5">Data &amp; Analytics Platform</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="flex-1 space-y-5">
           <div>
             <label className="block text-xs font-medium text-body uppercase tracking-wider mb-2">
               Role
@@ -138,7 +158,8 @@ export default function Login() {
             Sign In
             <span aria-hidden>→</span>
           </button>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
