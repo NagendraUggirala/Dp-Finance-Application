@@ -5,8 +5,9 @@ const ROLES = [
   { value: "", label: "Select role" },
   { value: "admin", label: "Admin" },
   { value: "hr_management", label: "HR Management" },
-  { value: "sales_representative", label: "Sales Representative" },
+  { value: "sales_Manager", label: "Sales Manager" },
   { value: "finance_management", label: "Finance Management" },
+  { value: "sales_representative", label: "Sales Representative" },
 ];
 
 export default function Login() {
@@ -40,7 +41,7 @@ export default function Login() {
     if (formData.role === "admin") return navigate("/admin");
     if (formData.role === "hr_management") return navigate("/dashboard");
     if (formData.role === "finance_management") return navigate("/finance");
-    if (formData.role === "sales_representative") return navigate("/sales");
+    if (formData.role === "sales_Manager") return navigate("/sales");
 
     console.log("Sign in", formData);
   };

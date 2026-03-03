@@ -10,6 +10,8 @@ import {
   Phone,
   Mail,
   Folder,
+  Upload,
+  BarChart3,
   LogOut,
 } from "lucide-react";
 
@@ -88,7 +90,7 @@ export default function SalesSidebar() {
               <div className={navLinkClass(isActive)}>
                 {isActive && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-blue-600 rounded-r" />}
                 <Filter className="w-5 h-5 shrink-0" strokeWidth={2} />
-                <span className="text-sm flex-1 min-w-0 truncate">My Pipeline</span>
+                <span className="text-sm flex-1 min-w-0 truncate">My Deals</span>
                 <span className="shrink-0 bg-red-500 text-white text-[10px] font-bold min-w-[1.25rem] h-5 rounded-full flex items-center justify-center">7</span>
               </div>
             )}
@@ -129,6 +131,25 @@ export default function SalesSidebar() {
                 {isActive && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-blue-600 rounded-r" />}
                 <Folder className="w-5 h-5 shrink-0" strokeWidth={2} />
                 <span className="text-sm">Documents</span>
+              </div>
+            )}
+          </NavLink>
+          <NavLink to="/sales/bulk-upload">
+            {({ isActive }) => (
+              <div className={navLinkClass(isActive)}>
+                {isActive && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-blue-600 rounded-r" />}
+                <Upload className="w-5 h-5 shrink-0" strokeWidth={2} />
+                <span className="text-sm">Bulk Upload</span>
+              </div>
+            )}
+          </NavLink>
+          <p className="text-[10px] font-bold text-black/60 uppercase tracking-wider px-3 py-2 mt-3">Reports</p>
+          <NavLink to="/sales/reports">
+            {({ isActive }) => (
+              <div className={navLinkClass(isActive)}>
+                {isActive && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-blue-600 rounded-r" />}
+                <BarChart3 className="w-5 h-5 shrink-0" strokeWidth={2} />
+                <span className="text-sm">Reports</span>
               </div>
             )}
           </NavLink>

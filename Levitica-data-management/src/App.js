@@ -23,6 +23,8 @@ import ActivityLogPage from "./pages/Sales/ActivityLogPage";
 import LogCallPage from "./pages/Sales/LogCallPage";
 import EmailLogPage from "./pages/Sales/EmailLogPage";
 import DocumentsPage from "./pages/Sales/DocumentsPage";
+import BulkUploadPage from "./pages/Sales/BulkUploadPage";
+import ReportsPage from "./pages/Sales/ReportsPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminOverview from "./pages/Admin/AdminOverview";
 import AdminPlaceholder from "./pages/Admin/AdminPlaceholder";
@@ -97,6 +99,8 @@ function App() {
           <Route path="log-call" element={<LogCallPage />} />
           <Route path="email-log" element={<EmailLogPage />} />
           <Route path="documents" element={<DocumentsPage />} />
+          <Route path="bulk-upload" element={<BulkUploadPage />} />
+          <Route path="reports" element={<ReportsPage />} />
         </Route>
         <Route path="/admin" element={<AdminDashboard />}>
           <Route index element={<AdminOverview />} />
