@@ -519,7 +519,7 @@ export default function LeadsPage() {
                     </td>
                     <td className="py-3 px-3">
                       <div className="flex items-center gap-2">
-                        <span className="w-8 h-8 rounded-full bg-[#4A6FB3] flex items-center justify-center text-white font-semibold text-xs shrink-0">
+                        <span className="w-8 h-8 rounded-full bg-[S.No4A6FB3] flex items-center justify-center text-white font-semibold text-xs shrink-0">
                           {row.ownerInitials}
                         </span>
                         <span className="text-black truncate" title={row.owner}>{row.owner}</span>
